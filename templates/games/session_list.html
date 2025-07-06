@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}My Sessions - MiniGameArchive{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="row mb-4">
+    <div class="col">
+        <h1><i class="bi bi-calendar-check"></i> My Training Sessions</h1>
+        <p class="text-muted">Manage your training sessions and plans</p>
+    </div>
+</div>
+
+{% if sessions %}
+<div class="row">
+    {% for session in sessions %}
+    <div class="col-lg-6 col-xl-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ session.name }}</h5>
+                
+                {% if session.description %}
+                <p class="card-text text-muted small">{{ session.description|truncatewords:20 }}</p>
+                {% endif %}
+                
+                <!-- Session Info -->
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <small class="text-muted">
+                            <i class="bi bi-controller"></i> {{ session.sessiongame_set.count }} games
+                        </small>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">
+                            <i class="bi bi-clock"></i> ~{{ session.get_total_duration }} min
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Focus Areas -->
+                {% if session.sessiongame_set.all %}
+                <div class="mb-3">
+                    {% regroup session.sessiongame_set.all|dictsort:"game.focus.name" by game.focus.all as focus_list %}
+                    {% for focus_group in focus_list %}
+                        {% for focus in focus_group.list %}
+                            {% if forloop.first %}
+                            <span class="badge bg-primary me-1 mb-1">{{ focus.game.focus.first.name }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <!-- Created Date -->
+                <small class="text-muted">
+                    <i class="bi bi-calendar"></i> Created {{ session.created_at|date:"M j, Y" }}
+                </small>
+            </div>
+            
+            <div class="card-footer bg-transparent">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'session_detail' session.id %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-eye"></i> View
+                    </a>
+                    <a href="{% url 'print_session' session.id %}" class="btn btn-outline-secondary btn-sm" target="_blank">
+                        <i class="bi bi-printer"></i> Print
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<!-- Empty State -->
+<div class="text-center py-5">
+    <i class="bi bi-calendar-x display-1 text-muted"></i>
+    <h3 class="text-muted">No training sessions yet</h3>
+    <p class="text-muted">Create your first training session by adding games to your cart</p>
+    <a href="{% url 'game_list' %}" class="btn btn-primary">
+        <i class="bi bi-search"></i> Browse Games
+    </a>
+</div>
+{% endif %}
+{% endblock %} 

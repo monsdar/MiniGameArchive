@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Games" %} - {% trans "MiniGameArchive" %}{% endblock %}
+
+{% block content %}
+<div x-data="gameList()">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="bi bi-controller"></i> {% trans "Training Games" %}</h1>
+            <p class="text-muted">{% trans "Browse and filter games for your training sessions" %}</p>
+        </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="row mb-4">
+        <div class="col-lg-3">
+            <!-- Search -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-search"></i> {% trans "Search" %}</h6>
+                </div>
+                <div class="card-body">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        placeholder="{% trans 'Search games...' %}"
+                        x-model="searchQuery"
+                        @input.debounce.300ms="updateFilters()"
+                    >
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-funnel"></i> {% trans "Filters" %}</h6>
+                </div>
+                <div class="card-body">
+                    <!-- Focus Areas -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{% trans "Focus Areas" %}</label>
+                        {% for focus in focuses %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                value="{{ focus.name }}"
+                                x-model="selectedFocuses"
+                                @change="updateFilters()"
+                                id="focus_{{ focus.id }}"
+                            >
+                            <label class="form-check-label" for="focus_{{ focus.id }}">
+                                {{ focus.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Player Count -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{% trans "Player Count" %}</label>
+                        <select class="form-select" x-model="selectedPlayerCount" @change="updateFilters()">
+                            <option value="">{% trans "All" %}</option>
+                            {% for value, label in player_counts %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{% trans "Duration" %}</label>
+                        <select class="form-select" x-model="selectedDuration" @change="updateFilters()">
+                            <option value="">{% trans "All" %}</option>
+                            {% for value, label in durations %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Materials -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{% trans "Materials" %}</label>
+                        {% for material in materials %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                value="{{ material.name }}"
+                                x-model="selectedMaterials"
+                                @change="updateFilters()"
+                                id="material_{{ material.id }}"
+                            >
+                            <label class="form-check-label" for="material_{{ material.id }}">
+                                {{ material.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Labels -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{% trans "Labels" %}</label>
+                        {% for label in labels %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                value="{{ label.name }}"
+                                x-model="selectedLabels"
+                                @change="updateFilters()"
+                                id="label_{{ label.id }}"
+                            >
+                            <label class="form-check-label" for="label_{{ label.id }}">
+                                <span class="badge" style="background-color: {{ label.color }};">{{ label.name }}</span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <button class="btn btn-outline-secondary btn-sm w-100" @click="clearFilters()">
+                        <i class="bi bi-x-circle"></i> {% trans "Clear Filters" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games Grid -->
+        <div class="col-lg-9">
+            <!-- Results Info -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="mb-0">
+                    {% trans "Showing" %} <span x-text="filteredGames.length"></span> {% trans "of" %} {{ page_obj.paginator.count }} {% trans "games" %}
+                </p>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary btn-sm" @click="viewMode = 'grid'">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" @click="viewMode = 'list'">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Games -->
+            <div x-show="filteredGames.length === 0" class="text-center py-5">
+                <i class="bi bi-search display-1 text-muted"></i>
+                <h4 class="text-muted">{% trans "No games found" %}</h4>
+                <p class="text-muted">{% trans "Try adjusting your search or filters" %}</p>
+            </div>
+
+            <!-- Grid View -->
+            <div x-show="viewMode === 'grid'" class="row g-3">
+                <template x-for="game in filteredGames" :key="game.id">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card game-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title" x-text="game.name"></h5>
+                                
+                                <!-- Focus Areas -->
+                                <div class="mb-2">
+                                    <template x-for="focus in game.focus" :key="focus">
+                                        <span class="badge bg-primary focus-badge me-1" x-text="focus"></span>
+                                    </template>
+                                </div>
+                                
+                                <!-- Player Count & Duration -->
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <small class="text-muted">
+                                            <i class="bi bi-people"></i>
+                                            <span x-text="game.player_count_display"></span>
+                                        </small>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock"></i>
+                                            <span x-text="game.duration_display"></span>
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Description -->
+                                <p class="card-text small" x-text="game.description.substring(0, 100) + '...'"></p>
+                                
+                                <!-- Materials -->
+                                <div class="mb-2" x-show="game.materials.length > 0">
+                                    <small class="text-muted">
+                                        <i class="bi bi-tools"></i>
+                                        <span x-text="game.materials.join(', ')"></span>
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a :href="`/game/${game.id}/`" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-eye"></i> {% trans "View" %}
+                                    </a>
+                                    <button 
+                                        class="btn btn-outline-success btn-sm"
+                                        @click="addToSession(game.id)"
+                                        :disabled="game.inSession"
+                                    >
+                                        <i class="bi bi-plus-circle"></i>
+                                        <span x-text="game.inSession ? 'Added' : 'Add'"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- List View -->
+            <div x-show="viewMode === 'list'" class="list-group">
+                <template x-for="game in filteredGames" :key="game.id">
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="mb-1" x-text="game.name"></h6>
+                                <div class="mb-2">
+                                    <template x-for="focus in game.focus" :key="focus">
+                                        <span class="badge bg-primary focus-badge me-1" x-text="focus"></span>
+                                    </template>
+                                </div>
+                                <p class="mb-1 small" x-text="game.description.substring(0, 150) + '...'"></p>
+                                <small class="text-muted">
+                                    <i class="bi bi-people"></i> <span x-text="game.player_count_display"></span> |
+                                    <i class="bi bi-clock"></i> <span x-text="game.duration_display"></span>
+                                    <span x-show="game.materials.length > 0">
+                                        | <i class="bi bi-tools"></i> <span x-text="game.materials.join(', ')"></span>
+                                    </span>
+                                </small>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a :href="`/game/${game.id}/`" class="btn btn-primary btn-sm me-2">
+                                    <i class="bi bi-eye"></i> {% trans "View" %}
+                                </a>
+                                <button 
+                                    class="btn btn-outline-success btn-sm"
+                                    @click="addToSession(game.id)"
+                                    :disabled="game.inSession"
+                                >
+                                    <i class="bi bi-plus-circle"></i>
+                                    <span x-text="game.inSession ? 'Added' : 'Add'"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function gameList() {
+    return {
+        searchQuery: '{{ search_query }}',
+        selectedFocuses: [],
+        selectedPlayerCount: '',
+        selectedDuration: '',
+        selectedMaterials: [],
+        selectedLabels: [],
+        viewMode: 'grid',
+        games: [
+            {% for game in page_obj %}
+            {
+                id: {{ game.id }},
+                name: '{{ game.name|escapejs }}',
+                description: '{{ game.description|escapejs }}',
+                focus: [{% for focus in game.focus.all %}'{{ focus.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                materials: [{% for material in game.materials.all %}'{{ material.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                labels: [{% for label in game.labels.all %}'{{ label.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                player_count: '{{ game.player_count }}',
+                player_count_display: '{{ game.get_player_count_display }}',
+                duration: '{{ game.duration }}',
+                duration_display: '{{ game.get_duration_display }}',
+                inSession: {% if game.id in cart %}true{% else %}false{% endif %}
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        
+        get filteredGames() {
+            return this.games.filter(game => {
+                // Search filter
+                if (this.searchQuery && !game.name.toLowerCase().includes(this.searchQuery.toLowerCase()) && 
+                    !game.description.toLowerCase().includes(this.searchQuery.toLowerCase())) {
+                    return false;
+                }
+                
+                // Focus filter
+                if (this.selectedFocuses.length > 0 && 
+                    !this.selectedFocuses.some(focus => game.focus.includes(focus))) {
+                    return false;
+                }
+                
+                // Player count filter
+                if (this.selectedPlayerCount && game.player_count !== this.selectedPlayerCount) {
+                    return false;
+                }
+                
+                // Duration filter
+                if (this.selectedDuration && game.duration !== this.selectedDuration) {
+                    return false;
+                }
+                
+                // Materials filter
+                if (this.selectedMaterials.length > 0 && 
+                    !this.selectedMaterials.some(material => game.materials.includes(material))) {
+                    return false;
+                }
+                
+                // Labels filter
+                if (this.selectedLabels.length > 0 && 
+                    !this.selectedLabels.some(label => game.labels.includes(label))) {
+                    return false;
+                }
+                
+                return true;
+            });
+        },
+        
+        updateFilters() {
+            // Update URL with current filters
+            const params = new URLSearchParams();
+            if (this.searchQuery) params.append('search', this.searchQuery);
+            this.selectedFocuses.forEach(focus => params.append('focus', focus));
+            if (this.selectedPlayerCount) params.append('player_count', this.selectedPlayerCount);
+            if (this.selectedDuration) params.append('duration', this.selectedDuration);
+            this.selectedMaterials.forEach(material => params.append('materials', material));
+            this.selectedLabels.forEach(label => params.append('labels', label));
+            
+            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+            window.history.pushState({}, '', newUrl);
+        },
+        
+        clearFilters() {
+            this.searchQuery = '';
+            this.selectedFocuses = [];
+            this.selectedPlayerCount = '';
+            this.selectedDuration = '';
+            this.selectedMaterials = [];
+            this.selectedLabels = [];
+            this.updateFilters();
+        },
+        
+        async addToSession(gameId) {
+            try {
+                const response = await fetch('/add-to-cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({ game_id: gameId })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    // Update session count in navbar
+                    const sessionBadge = document.querySelector('.session-badge');
+                    if (sessionBadge) {
+                        sessionBadge.textContent = data.cart_count;
+                    }
+                    
+                    // Update game inSession status
+                    const game = this.games.find(g => g.id === gameId);
+                    if (game) {
+                        game.inSession = true;
+                    }
+                } else {
+                    alert(data.message || "{% trans 'Error adding to training session' %}");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("{% trans 'Error adding to training session' %}");
+            }
+        }
+    }
+}
+</script>
+{% endblock %} 

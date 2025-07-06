@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms %}
+
+{% block title %}Suggest Game - MiniGameArchive{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="row mb-4">
+    <div class="col">
+        <h1><i class="bi bi-plus-circle"></i> Suggest a New Game</h1>
+        <p class="text-muted">Help other coaches by suggesting a new training game</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Game Suggestion Form</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-send"></i> Submit Suggestion
+                        </button>
+                        <a href="{% url 'game_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Games
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Guidelines -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Suggestion Guidelines</h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li>Provide a clear, descriptive name for the game</li>
+                    <li>Include detailed step-by-step instructions</li>
+                    <li>Specify the focus areas (e.g., dribbling, teamwork, shooting)</li>
+                    <li>Indicate the number of players needed</li>
+                    <li>List all required materials</li>
+                    <li>Estimate the typical duration</li>
+                    <li>Include any variations or modifications</li>
+                    <li>Add relevant labels for easy categorization</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

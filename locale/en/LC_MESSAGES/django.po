@@ -1,0 +1,196 @@
+# English translations for MiniGameArchive.
+# Copyright (C) 2024 MiniGameArchive
+# This file is distributed under the same license as the MiniGameArchive project.
+msgid ""
+msgstr ""
+"Project-Id-Version: MiniGameArchive 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: 2024-01-01 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/base.html:6
+msgid "MiniGameArchive"
+msgstr "MiniGameArchive"
+
+#: templates/base.html:42
+msgid "Games"
+msgstr "Games"
+
+#: templates/base.html:45
+msgid "My Sessions"
+msgstr "My Sessions"
+
+#: templates/base.html:48
+msgid "Suggest Game"
+msgstr "Suggest Game"
+
+#: templates/base.html:52
+msgid "Training Session"
+msgstr "Training Session"
+
+#: templates/base.html:65
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/base.html:67
+msgid "Logout"
+msgstr "Logout"
+
+#: templates/base.html:71
+msgid "Login"
+msgstr "Login"
+
+#: templates/base.html:95
+msgid "A Django website for managing sports training games."
+msgstr "A Django website for managing sports training games."
+
+#: templates/games/cart.html:6
+msgid "Training Session Builder"
+msgstr "Training Session Builder"
+
+#: templates/games/cart.html:8
+msgid "Review your selected games and create a training session"
+msgstr "Review your selected games and create a training session"
+
+#: templates/games/cart.html:20
+msgid "Selected Games"
+msgstr "Selected Games"
+
+#: templates/games/cart.html:44
+msgid "View"
+msgstr "View"
+
+#: templates/games/cart.html:49
+msgid "Remove"
+msgstr "Remove"
+
+#: templates/games/cart.html:58
+msgid "Save Training Session"
+msgstr "Save Training Session"
+
+#: templates/games/cart.html:66
+msgid "Save Session"
+msgstr "Save Session"
+
+#: templates/games/cart.html:69
+msgid "Add More Games"
+msgstr "Add More Games"
+
+#: templates/games/cart.html:76
+msgid "Quick Actions"
+msgstr "Quick Actions"
+
+#: templates/games/cart.html:80
+msgid "Print Session"
+msgstr "Print Session"
+
+#: templates/games/cart.html:85
+msgid "Are you sure you want to clear all games from your training session?"
+msgstr "Are you sure you want to clear all games from your training session?"
+
+#: templates/games/cart.html:87
+msgid "Clear Session"
+msgstr "Clear Session"
+
+#: templates/games/cart.html:90
+msgid "Print your current training session without saving it"
+msgstr "Print your current training session without saving it"
+
+#: templates/games/cart.html:96
+msgid "Session Summary"
+msgstr "Session Summary"
+
+#: templates/games/cart.html:101
+msgid "Estimated Duration"
+msgstr "Estimated Duration"
+
+#: templates/games/cart.html:102
+msgid "minutes"
+msgstr "minutes"
+
+#: templates/games/cart.html:110
+msgid "No games in your training session"
+msgstr "No games in your training session"
+
+#: templates/games/cart.html:111
+msgid "Add some games to create a training session"
+msgstr "Add some games to create a training session"
+
+#: templates/games/cart.html:113
+msgid "Browse Games"
+msgstr "Browse Games"
+
+#: templates/games/game_list.html:6
+msgid "Training Games"
+msgstr "Training Games"
+
+#: templates/games/game_list.html:8
+msgid "Browse and filter games for your training sessions"
+msgstr "Browse and filter games for your training sessions"
+
+#: templates/games/game_list.html:16
+msgid "Search"
+msgstr "Search"
+
+#: templates/games/game_list.html:22
+msgid "Search games..."
+msgstr "Search games..."
+
+#: templates/games/game_list.html:28
+msgid "Filters"
+msgstr "Filters"
+
+#: templates/games/game_list.html:33
+msgid "Focus Areas"
+msgstr "Focus Areas"
+
+#: templates/games/game_list.html:47
+msgid "Player Count"
+msgstr "Player Count"
+
+#: templates/games/game_list.html:50
+msgid "All"
+msgstr "All"
+
+#: templates/games/game_list.html:58
+msgid "Duration"
+msgstr "Duration"
+
+#: templates/games/game_list.html:69
+msgid "Materials"
+msgstr "Materials"
+
+#: templates/games/game_list.html:82
+msgid "Labels"
+msgstr "Labels"
+
+#: templates/games/game_list.html:95
+msgid "Clear Filters"
+msgstr "Clear Filters"
+
+#: templates/games/game_list.html:104
+msgid "Showing"
+msgstr "Showing"
+
+#: templates/games/game_list.html:105
+msgid "of"
+msgstr "of"
+
+#: templates/games/game_list.html:105
+msgid "games"
+msgstr "games"
+
+#: templates/games/game_list.html:115
+msgid "No games found"
+msgstr "No games found"
+
+#: templates/games/game_list.html:116
+msgid "Try adjusting your search or filters"
+msgstr "Try adjusting your search or filters" 

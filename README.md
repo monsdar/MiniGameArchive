@@ -38,11 +38,96 @@ The typical user-flow let's the coach search and filter for games. When he finds
 
 The printouts are designed to be printed in business card format (front and back page), so it's easy to have them on hand and give some help when checking for the details while working with the team.
 
-# Installation
+## Technology Stack
+
+* **Backend:** Django 5.0
+* **Frontend:** Bootstrap 5 + Alpine.js
+* **Database:** SQLite (default) or PostgreSQL
+* **Deployment:** Docker
+
+## Features
+
+### Frontend Features
+- **Responsive Design:** Works on desktop, tablet, and mobile devices
+- **Real-time Filtering:** Alpine.js-powered filtering and search
+- **Shopping Cart:** Add games to training sessions like an e-commerce site
+- **Print Functionality:** Business card format printing for games and sessions
+- **Modern UI:** Clean, intuitive interface with Bootstrap 5
+
+### Backend Features
+- **Game Management:** Full CRUD operations for games
+- **User Suggestions:** Public can suggest new games for admin review
+- **Training Sessions:** Create and manage training plans
+- **Admin Interface:** Comprehensive Django admin panel
+- **Session-based Cart:** Persistent cart functionality
+
+## Installation
+
+### Quick Setup (Recommended)
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd MiniGameArchive
+   ```
+
+2. **Run the setup script:**
+   ```bash
+   python setup.py
+   ```
+
+3. **Start the development server:**
+   ```bash
+   python manage.py runserver
+   ```
+
+4. **Access the application:**
+   - Main site: http://localhost:8000/
+   - Admin panel: http://localhost:8000/admin/
+   - Admin credentials: admin/admin123
+
+### Manual Setup
+
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Set up the database:**
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+3. **Load sample data:**
+   ```bash
+   python manage.py load_sample_data
+   ```
+
+4. **Create a superuser:**
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+5. **Collect static files:**
+   ```bash
+   python manage.py collectstatic --noinput
+   ```
+
+6. **Start the development server:**
+   ```bash
+   python manage.py runserver
+   ```
+
+## Docker Deployment
 
 The website comes in a Docker container and can be simply started by running the following command:
 
-* `docker run --it -v ./data:/data -p 8080:8080 monsdar/minigamearchive:latest`
+```bash
+docker run -it -v ./data:/data -p 8080:8080 monsdar/minigamearchive:latest
+```
+
+### Environment Variables
 
 By default it uses SQLite to store data, but you can also connect it to a Postgres DB by using the following env vars:
 
@@ -58,6 +143,92 @@ The following configuration options are available as well via env vars:
 * `DJANGO_PRODUCTION`: Set this to any value to have the application run in production mode. Else debugging will be enabled
 * `DJANGO_SECRET_KEY`: Set your own Django secret key. Should be at least 32 char in length
 * `DJANGO_CSRF_TRUSTED_ORIGINS`: Define which addresses the page trusts for loading scripts etc
+
+## Usage
+
+### For Coaches
+
+1. **Browse Games:** Visit the main page to see all available games
+2. **Filter & Search:** Use the sidebar filters to find specific types of games
+3. **Add to Cart:** Click "Add to Cart" on games you want to include
+4. **Create Session:** Go to your cart and create a training session
+5. **Print:** Print individual game cards or the entire session
+
+### For Administrators
+
+1. **Access Admin:** Login to the Django admin panel
+2. **Manage Games:** Add, edit, or remove games
+3. **Review Suggestions:** Approve or reject user-submitted games
+4. **Manage Categories:** Add focus areas, materials, and labels
+
+## Development
+
+### Project Structure
+
+```
+MiniGameArchive/
+├── minigamearchive/          # Django project settings
+├── games/                    # Main app
+│   ├── models.py            # Database models
+│   ├── views.py             # View logic
+│   ├── forms.py             # Forms
+│   ├── admin.py             # Admin interface
+│   └── management/          # Custom commands
+├── templates/               # HTML templates
+│   ├── base.html           # Base template
+│   └── games/              # Game-specific templates
+├── static/                  # Static files (CSS, JS)
+├── tests/                   # Test suite
+│   ├── test_models.py      # Model tests
+│   ├── test_views.py       # View tests
+│   ├── test_forms.py       # Form tests
+│   ├── test_management_commands.py # Management command tests
+│   ├── test_utils.py       # Utility tests
+│   └── test_settings.py    # Test-specific settings
+├── data/                    # Database and media files
+├── requirements.txt         # Python dependencies
+├── Dockerfile              # Docker configuration
+├── setup.py                # Setup script
+└── run_tests.py            # Test runner script
+```
+
+### Adding New Features
+
+1. **Models:** Add new fields to `games/models.py`
+2. **Views:** Create new views in `games/views.py`
+3. **Templates:** Add templates in `templates/games/`
+4. **URLs:** Update `games/urls.py` with new routes
+5. **Admin:** Register new models in `games/admin.py`
+6. **Tests:** Add corresponding tests in the `tests/` directory
+
+### Testing
+
+The project includes a comprehensive test suite to ensure code quality and prevent regressions.
+
+#### Running Tests
+```bash
+# Run all tests
+python run_tests.py
+
+# Run with coverage
+python run_tests.py --coverage
+
+# Run specific test file
+python run_tests.py --test-pattern tests.test_models
+
+# Run all checks (tests, linting, security)
+python run_tests.py --all
+```
+
+#### Test Coverage
+The test suite covers:
+- **Models**: Database operations, relationships, validation
+- **Views**: HTTP responses, authentication, business logic
+- **Forms**: Validation, data processing, error handling
+- **Management Commands**: Command execution, error handling
+- **Utilities**: Helper functions, configuration
+
+For detailed testing information, see [tests/README.md](tests/README.md).
 
 ## Support
 

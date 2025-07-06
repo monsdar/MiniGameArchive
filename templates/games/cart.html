@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load crispy_forms %}
+{% load i18n %}
+
+{% block title %}{% trans "Training Session" %} - {% trans "MiniGameArchive" %}{% endblock %}
+
+{% block content %}
+<div x-data="trainingSession()">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1><i class="bi bi-calendar-plus"></i> {% trans "Training Session Builder" %}</h1>
+            <p class="text-muted">{% trans "Review your selected games and create a training session" %}</p>
+        </div>
+    </div>
+
+    {% if cart_games %}
+    <div class="row">
+        <!-- Selected Games -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-check"></i> {% trans "Selected Games" %} ({{ cart_games.count }})
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for game in cart_games %}
+                        <div class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h6 class="mb-1">{{ game.name }}</h6>
+                                    <div class="mb-2">
+                                        {% for focus in game.focus.all %}
+                                        <span class="badge bg-primary me-1">{{ focus.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-people"></i> {{ game.get_player_count_display }} |
+                                        <i class="bi bi-clock"></i> {{ game.get_duration_display }}
+                                        {% if game.materials.all %}
+                                        | <i class="bi bi-tools"></i> {{ game.get_materials_display }}
+                                        {% endif %}
+                                    </small>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'game_detail' game.id %}" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-eye"></i> {% trans "View" %}
+                                        </a>
+                                        <button 
+                                            class="btn btn-outline-danger btn-sm"
+                                            @click="removeFromSession({{ game.id }})"
+                                        >
+                                            <i class="bi bi-trash"></i> {% trans "Remove" %}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Session Form -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle"></i> {% trans "Save Training Session" %}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> {% trans "Save Session" %}
+                            </button>
+                            <a href="{% url 'game_list' %}" class="btn btn-outline-primary">
+                                <i class="bi bi-plus-circle"></i> {% trans "Add More Games" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-lightning"></i> {% trans "Quick Actions" %}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'print_session_builder' %}" class="btn btn-outline-secondary" target="_blank">
+                            <i class="bi bi-printer"></i> {% trans "Print Session" %}
+                        </a>
+                        <form method="post" action="{% url 'clear_cart' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger w-100" 
+                                    data-confirm="{% trans 'Are you sure you want to clear all games from your training session?' %}">
+                                <i class="bi bi-trash"></i> {% trans "Clear Session" %}
+                            </button>
+                        </form>
+                        <small class="text-muted text-center">
+                            {% trans "Print your current training session without saving it" %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Info -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-info-circle"></i> {% trans "Session Summary" %}</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-controller text-primary me-2"></i>
+                            <strong>{% trans "Games" %}:</strong> {{ cart_games.count }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-clock text-primary me-2"></i>
+                            <strong>{% trans "Estimated Duration" %}:</strong> ~{{ total_duration }} {% trans "minutes" %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <i class="bi bi-calendar-x display-1 text-muted"></i>
+        <h3 class="text-muted">{% trans "No games in your training session" %}</h3>
+        <p class="text-muted">{% trans "Add some games to create a training session" %}</p>
+        <a href="{% url 'game_list' %}" class="btn btn-primary">
+            <i class="bi bi-search"></i> {% trans "Browse Games" %}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function trainingSession() {
+    return {
+        async removeFromSession(gameId) {
+            try {
+                const response = await fetch('/remove-from-cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({ game_id: gameId })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    // Reload page to update session
+                    window.location.reload();
+                } else {
+                    alert(data.message || "{% trans 'Error removing from training session' %}");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("{% trans 'Error removing from training session' %}");
+            }
+        }
+    }
+}
+
+// Handle confirmation dialogs for forms with data-confirm
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('form button[data-confirm]').forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            const confirmMessage = this.getAttribute('data-confirm');
+            if (!confirm(confirmMessage)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

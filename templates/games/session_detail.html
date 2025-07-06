@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ session.name }} - MiniGameArchive{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'session_list' %}">My Sessions</a></li>
+        <li class="breadcrumb-item active">{{ session.name }}</li>
+    </ol>
+</nav>
+
+<!-- Session Header -->
+<div class="row mb-4">
+    <div class="col">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h1>{{ session.name }}</h1>
+                {% if session.description %}
+                <p class="text-muted">{{ session.description }}</p>
+                {% endif %}
+                <small class="text-muted">
+                    Created on {{ session.created_at|date:"F j, Y" }} | 
+                    {{ session.sessiongame_set.count }} games | 
+                    ~{{ session.get_total_duration }} minutes
+                </small>
+            </div>
+            <div class="btn-group" role="group">
+                <a href="{% url 'print_session' session.id %}" class="btn btn-outline-primary" target="_blank">
+                    <i class="bi bi-printer"></i> Print Session
+                </a>
+                <a href="{% url 'game_list' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-plus-circle"></i> Add Games
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Games List -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-list-ol"></i> Session Games</h5>
+            </div>
+            <div class="card-body">
+                {% for session_game in session.sessiongame_set.all %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex align-items-start">
+                                    <div class="me-3">
+                                        <span class="badge bg-primary fs-6">{{ forloop.counter }}</span>
+                                    </div>
+                                    <div>
+                                        <h5 class="card-title">{{ session_game.game.name }}</h5>
+                                        
+                                        <!-- Focus Areas -->
+                                        <div class="mb-2">
+                                            {% for focus in session_game.game.focus.all %}
+                                            <span class="badge bg-primary me-1">{{ focus.name }}</span>
+                                            {% endfor %}
+                                        </div>
+                                        
+                                        <!-- Game Info -->
+                                        <div class="row mb-2">
+                                            <div class="col-md-6">
+                                                <small class="text-muted">
+                                                    <i class="bi bi-people"></i> {{ session_game.game.get_player_count_display }}
+                                                </small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clock"></i> 
+                                                    {% if session_game.duration_multiplier != 1.0 %}
+                                                        {{ session_game.game.get_duration_display }} (×{{ session_game.duration_multiplier }})
+                                                    {% else %}
+                                                        {{ session_game.game.get_duration_display }}
+                                                    {% endif %}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Description -->
+                                        <p class="card-text small">{{ session_game.game.description|truncatewords:30 }}</p>
+                                        
+                                        <!-- Materials -->
+                                        {% if session_game.game.materials.all %}
+                                        <div class="mb-2">
+                                            <small class="text-muted">
+                                                <i class="bi bi-tools"></i> {{ session_game.game.get_materials_display }}
+                                            </small>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        <!-- Notes -->
+                                        {% if session_game.notes %}
+                                        <div class="alert alert-info small mb-0">
+                                            <strong>Notes:</strong> {{ session_game.notes }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="btn-group-vertical w-100">
+                                    <a href="{% url 'game_detail' session_game.game.id %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-eye"></i> View Details
+                                    </a>
+                                    <a href="{% url 'print_game' session_game.game.id %}" class="btn btn-outline-secondary btn-sm" target="_blank">
+                                        <i class="bi bi-printer"></i> Print Card
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-4">
+                    <i class="bi bi-controller display-4 text-muted"></i>
+                    <h5 class="text-muted">No games in this session</h5>
+                    <p class="text-muted">Add some games to get started</p>
+                    <a href="{% url 'game_list' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Add Games
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Info -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-info-circle"></i> Session Summary</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span><i class="bi bi-controller text-primary me-2"></i>Total Games:</span>
+                            <strong>{{ session.sessiongame_set.count }}</strong>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span><i class="bi bi-clock text-primary me-2"></i>Total Duration:</span>
+                            <strong>~{{ session.get_total_duration }} minutes</strong>
+                        </div>
+                    </li>
+                    <li class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span><i class="bi bi-calendar text-primary me-2"></i>Created:</span>
+                            <strong>{{ session.created_at|date:"M j, Y" }}</strong>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Focus Areas Summary -->
+        {% if session.sessiongame_set.all %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-target"></i> Focus Areas</h6>
+            </div>
+            <div class="card-body">
+                {% regroup session.sessiongame_set.all|dictsort:"game.focus.name" by game.focus.all as focus_list %}
+                {% for focus_group in focus_list %}
+                    {% for focus in focus_group.list %}
+                        {% if forloop.first %}
+                        <span class="badge bg-primary me-1 mb-1">{{ focus.game.focus.first.name }}</span>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

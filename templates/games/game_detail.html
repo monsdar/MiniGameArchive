@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ game.name }} - MiniGameArchive{% endblock %}
+
+{% block content %}
+<div x-data="gameDetail()">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'game_list' %}">Games</a></li>
+            <li class="breadcrumb-item active">{{ game.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Game Details -->
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Game Header -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h1 class="card-title">{{ game.name }}</h1>
+                            
+                            <!-- Focus Areas -->
+                            <div class="mb-3">
+                                {% for focus in game.focus.all %}
+                                <span class="badge bg-primary me-1">{{ focus.name }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Player Count & Duration -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-people text-primary me-2"></i>
+                                        <span>{{ game.get_player_count_display }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-clock text-primary me-2"></i>
+                                        <span>{{ game.get_duration_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Add to Training Session Button -->
+                        <div>
+                            <button 
+                                class="btn btn-success btn-lg"
+                                @click="addToSession({{ game.id }})"
+                                :disabled="inSession"
+                                x-text="inSession ? 'Added to Session' : 'Add to Session'"
+                            >
+                                <i class="bi bi-plus-circle me-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Description</h5>
+                </div>
+                <div class="card-body">
+                    <div class="description-content">
+                        {{ game.description|linebreaks }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Variants -->
+            {% if game.variants %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-arrow-repeat"></i> Variants</h5>
+                </div>
+                <div class="card-body">
+                    <div class="variants-content">
+                        {{ game.variants|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Materials -->
+            {% if game.materials.all %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-tools"></i> Materials Needed</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        {% for material in game.materials.all %}
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            {{ material.name }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Labels -->
+            {% if game.labels.all %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-tags"></i> Labels</h5>
+                </div>
+                <div class="card-body">
+                    {% for label in game.labels.all %}
+                    <span class="badge me-1 mb-1" style="background-color: {{ label.color }};">
+                        {{ label.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-gear"></i> Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'print_game' game.id %}" class="btn btn-outline-primary" target="_blank">
+                            <i class="bi bi-printer"></i> Print Game Card
+                        </a>
+                        <a href="{% url 'game_suggestion' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-plus-circle"></i> Suggest Similar Game
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function gameDetail() {
+    return {
+        inSession: {% if in_cart %}true{% else %}false{% endif %},
+        
+        async addToSession(gameId) {
+            try {
+                const response = await fetch('/add-to-cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({ game_id: gameId })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    this.inSession = true;
+                    
+                    // Update session count in navbar
+                    const sessionBadge = document.querySelector('.session-badge');
+                    if (sessionBadge) {
+                        sessionBadge.textContent = data.cart_count;
+                    }
+                } else {
+                    alert(data.message || 'Error adding to training session');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding to training session');
+            }
+        }
+    }
+}
+</script>
+{% endblock %} 
