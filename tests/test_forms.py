@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from games.forms import GameForm, TrainingSessionForm, GameSuggestionForm
-from games.models import Game, Focus, Material, Label, TrainingSession
+from games.models import Game, Focus, Material, Label, TrainingSession, Language
 
 logger = logging.getLogger(__name__)
 
@@ -24,31 +24,34 @@ class GameFormTest(TestCase):
         self.focus = Focus.objects.create(name="Dribbling")
         self.material = Material.objects.create(name="Basketball")
         self.label = Label.objects.create(name="Warm-up", color="#FF0000")
+        self.language, _ = Language.objects.get_or_create(code="en", defaults={"name": "English"})
         
         # Create a test game for update tests
         self.game = Game.objects.create(
             name='Test Game',
             description='A test game for dribbling practice',
-            player_count='1-2',
-            duration='10min',
+            player_count='2',
+            duration='15min',
             variants='Some variants',
             created_by=self.user
         )
         self.game.focus.add(self.focus)
         self.game.materials.add(self.material)
         self.game.labels.add(self.label)
+        self.game.languages.add(self.language)
     
     def test_game_form_valid(self):
         """Test that GameForm is valid with correct data"""
         form_data = {
             'name': 'Test Game',
             'description': 'A test game for dribbling practice',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
             'variants': 'Some variants',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],
+            'languages': [self.language.id],
         }
         
         form = GameForm(data=form_data)
@@ -58,8 +61,8 @@ class GameFormTest(TestCase):
         """Test that GameForm is invalid without required fields"""
         form_data = {
             'description': 'A test game for dribbling practice',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
         }
         
         form = GameForm(data=form_data)
@@ -71,12 +74,13 @@ class GameFormTest(TestCase):
         form_data = {
             'name': 'Test Game 2',  # Use a unique name
             'description': 'A test game for dribbling practice',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
             'variants': 'Some variants',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],
+            'languages': [self.language.id],
         }
         
         form = GameForm(data=form_data)
@@ -89,8 +93,8 @@ class GameFormTest(TestCase):
         
         self.assertEqual(game.name, 'Test Game 2')
         self.assertEqual(game.description, 'A test game for dribbling practice')
-        self.assertEqual(game.player_count, '1-2')
-        self.assertEqual(game.duration, '10min')
+        self.assertEqual(game.player_count, '2')
+        self.assertEqual(game.duration, '15min')
         self.assertEqual(game.variants, 'Some variants')
         self.assertEqual(game.created_by, self.user)
         
@@ -104,11 +108,12 @@ class GameFormTest(TestCase):
         form_data = {
             'name': 'Updated Game',
             'description': 'Updated description',
-            'player_count': '5-6',  # valid choice
+            'player_count': '5+',  # valid choice
             'duration': '15min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],
+            'languages': [self.language.id],
             'variants': 'Updated variants'
         }
         
@@ -123,7 +128,7 @@ class GameFormTest(TestCase):
         
         self.assertEqual(updated_game.name, 'Updated Game')
         self.assertEqual(updated_game.description, 'Updated description')
-        self.assertEqual(updated_game.player_count, '5-6')
+        self.assertEqual(updated_game.player_count, '5+')
         self.assertEqual(updated_game.duration, '15min')
         self.assertIn(self.focus, updated_game.focus.all())
         self.assertIn(self.material, updated_game.materials.all())
@@ -139,12 +144,14 @@ class TrainingSessionFormTest(TestCase):
             username='testuser',
             password='testpass123'
         )
+        self.language, _ = Language.objects.get_or_create(code="en", defaults={"name": "English"})
     
     def test_training_session_form_valid(self):
         """Test that TrainingSessionForm is valid with correct data"""
         form_data = {
             'name': 'Test Training Session',
             'description': 'A test training session',
+            'languages': [self.language.id],
         }
         
         form = TrainingSessionForm(data=form_data)
@@ -165,6 +172,7 @@ class TrainingSessionFormTest(TestCase):
         form_data = {
             'name': 'Test Training Session',
             'description': 'A test training session',
+            'languages': [self.language.id],
         }
         
         form = TrainingSessionForm(data=form_data)
@@ -191,6 +199,7 @@ class TrainingSessionFormTest(TestCase):
         form_data = {
             'name': 'Updated Session',
             'description': 'Updated description',
+            'languages': [self.language.id],
         }
         
         form = TrainingSessionForm(data=form_data, instance=session)
@@ -210,19 +219,21 @@ class GameSuggestionFormTest(TestCase):
         self.focus = Focus.objects.create(name="Dribbling")
         self.material = Material.objects.create(name="Basketball")
         self.label = Label.objects.create(name="Warm-up", color="#FF0000")
+        self.language, _ = Language.objects.get_or_create(code="en", defaults={"name": "English"})
     
     def test_game_suggestion_form_valid(self):
         """Test that GameSuggestionForm is valid with correct data"""
         form_data = {
             'name': 'Suggested Game',
             'description': 'A suggested game',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
             'variants': 'Some variants',
             'email': 'test@example.com',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],
+            'languages': [self.language.id],
         }
         
         form = GameSuggestionForm(data=form_data)
@@ -232,8 +243,8 @@ class GameSuggestionFormTest(TestCase):
         """Test that GameSuggestionForm is invalid without required fields"""
         form_data = {
             'description': 'A suggested game',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
             'email': 'test@example.com',
         }
         
@@ -263,11 +274,12 @@ class GameSuggestionFormTest(TestCase):
         form_data = {
             'name': 'Test Game',
             'description': 'A test game',
-            'player_count': '3-4',
-            'duration': '10min',
+            'player_count': '3+',
+            'duration': '15min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
-            'labels': [self.label.id]
+            'labels': [self.label.id],
+            'languages': [self.language.id]
         }
         
         form = GameSuggestionForm(data=form_data)
@@ -280,11 +292,12 @@ class GameSuggestionFormTest(TestCase):
         form_data = {
             'name': 'Test Game',
             'description': 'A test game',
-            'player_count': '3-4',
-            'duration': '10min',
+            'player_count': '3+',
+            'duration': '15min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],
+            'languages': [self.language.id],
             'variants': 'Some variants'
         }
         
@@ -297,8 +310,8 @@ class GameSuggestionFormTest(TestCase):
         # Test that cleaned data contains expected fields
         self.assertEqual(cleaned_data['name'], 'Test Game')
         self.assertEqual(cleaned_data['description'], 'A test game')
-        self.assertEqual(cleaned_data['player_count'], '3-4')
-        self.assertEqual(cleaned_data['duration'], '10min')
+        self.assertEqual(cleaned_data['player_count'], '3+')
+        self.assertEqual(cleaned_data['duration'], '15min')
 
 
 class FormIntegrationTest(TestCase):
@@ -314,18 +327,20 @@ class FormIntegrationTest(TestCase):
         self.focus = Focus.objects.create(name="Dribbling")
         self.material = Material.objects.create(name="Basketball")
         self.label = Label.objects.create(name="Warm-up", color="#FF0000")
+        self.language, _ = Language.objects.get_or_create(code="en", defaults={"name": "English"})
     
     def test_game_form_with_existing_relationships(self):
         """Test GameForm with existing focus, materials, and labels"""
         form_data = {
             'name': 'Integration Test Game',
             'description': 'A game for integration testing',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
             'variants': 'Integration variants',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],
+            'languages': [self.language.id],
         }
         
         form = GameForm(data=form_data)
@@ -348,6 +363,7 @@ class FormIntegrationTest(TestCase):
         form_data = {
             'name': 'Integration Test Session',
             'description': 'A session for integration testing',
+            'languages': [self.language.id],
         }
         
         form = TrainingSessionForm(data=form_data)
@@ -369,8 +385,8 @@ class FormIntegrationTest(TestCase):
         form_data = {
             'name': '',  # Required field missing
             'description': 'A test game',
-            'player_count': '2-4',
-            'duration': '10min'
+            'player_count': '2',
+            'duration': '15min'
         }
         
         form = GameForm(data=form_data)
@@ -392,8 +408,8 @@ class FormIntegrationTest(TestCase):
         form_data = {
             'name': '',  # Required field missing
             'description': 'A suggested game',
-            'player_count': '1-2',
-            'duration': '10min',
+            'player_count': '2',
+            'duration': '15min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
             'labels': [self.label.id],

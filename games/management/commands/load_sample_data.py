@@ -56,8 +56,8 @@ class Command(BaseCommand):
             {
                 'name': 'Fruit Bowl',
                 'description': 'Players dribble around cones while calling out different fruits. When "banana" is called, everyone must change direction. Great for dribbling skills and listening.',
-                'player_count': '5-6',
-                'duration': '10min',
+                'player_count': '5+',
+                'duration': '15min',
                 'focus': ['Dribbling', 'Coordination'],
                 'materials': ['Basketball', 'Cones'],
                 'labels': ['Fun', 'Beginner'],
@@ -66,7 +66,7 @@ class Command(BaseCommand):
             {
                 'name': 'Sharks and Minnows',
                 'description': 'One player is the shark in the middle. Other players (minnows) must dribble from one end to the other without getting their ball stolen. If caught, they become a shark.',
-                'player_count': '7-8',
+                'player_count': '5+',
                 'duration': '15min',
                 'focus': ['Dribbling', 'Defense', 'Agility'],
                 'materials': ['Basketball', 'Halfcourt'],
@@ -76,8 +76,8 @@ class Command(BaseCommand):
             {
                 'name': 'Around the World',
                 'description': 'Players shoot from different spots around the court. Must make a shot from each spot before moving to the next. Great for shooting practice and accuracy.',
-                'player_count': '3-4',
-                'duration': '20min',
+                'player_count': '3+',
+                'duration': '15min',
                 'focus': ['Shooting'],
                 'materials': ['Basketball', 'Hoop'],
                 'labels': ['Advanced'],
@@ -86,8 +86,8 @@ class Command(BaseCommand):
             {
                 'name': 'Passing Relay',
                 'description': 'Teams line up and pass the ball down the line. Last player dribbles to the front and the process continues. First team to get everyone through wins.',
-                'player_count': '9-10',
-                'duration': '10min',
+                'player_count': '10+',
+                'duration': '15min',
                 'focus': ['Passing', 'Teamwork'],
                 'materials': ['Basketball'],
                 'labels': ['Teamwork', 'Fun'],
@@ -96,7 +96,7 @@ class Command(BaseCommand):
             {
                 'name': 'Defensive Slides',
                 'description': 'Players practice defensive stance and sliding movements. Coach calls out directions and players slide accordingly. Focus on proper defensive positioning.',
-                'player_count': '5-6',
+                'player_count': '5+',
                 'duration': '15min',
                 'focus': ['Defense', 'Conditioning'],
                 'materials': ['Halfcourt'],

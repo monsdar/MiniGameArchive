@@ -77,28 +77,19 @@ class Game(models.Model):
     """A game or exercise for sports training"""
     DURATION_CHOICES = [
         ('5min', '5 minutes'),
-        ('10min', '10 minutes'),
         ('15min', '15 minutes'),
-        ('20min', '20 minutes'),
         ('30min', '30 minutes'),
         ('45min', '45 minutes'),
         ('60min', '60 minutes'),
-        ('90min', '90 minutes'),
-        ('120min', '120 minutes'),
-        ('10+min', '10+ minutes'),
-        ('15+min', '15+ minutes'),
-        ('20+min', '20+ minutes'),
-        ('30+min', '30+ minutes'),
     ]
     
     PLAYER_COUNT_CHOICES = [
-        ('1-2', '1-2 players'),
-        ('3-4', '3-4 players'),
-        ('5-6', '5-6 players'),
-        ('7-8', '7-8 players'),
-        ('9-10', '9-10 players'),
-        ('11-12', '11-12 players'),
-        ('13+', '13+ players'),
+        ('1', '1 player'),
+        ('2', '2 players'),
+        ('3+', '3+ players'),
+        ('5+', '5+ players'),
+        ('10+', '10+ players'),
+        ('15+', '15+ players'),
         ('any', 'Any number'),
     ]
     
@@ -169,11 +160,8 @@ class TrainingSession(models.Model):
         total_minutes = 0
         for session_game in self.sessiongame_set.all():
             duration_str = session_game.game.duration
-            if '+' in duration_str:
-                # For ranges like "10+min", use the minimum
-                minutes = int(duration_str.replace('+min', ''))
-            else:
-                minutes = int(duration_str.replace('min', ''))
+            # All durations now end with 'min'
+            minutes = int(duration_str.replace('min', ''))
             total_minutes += minutes * session_game.duration_multiplier
         return total_minutes
 

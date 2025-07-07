@@ -97,8 +97,8 @@ class GameModelTest(TestCase):
         self.game = Game.objects.create(
             name="Test Game",
             description="A test game for dribbling practice",
-            player_count="2-4",
-            duration="10min",
+            player_count="2",
+            duration="15min",
             created_by=self.user
         )
         self.game.focus.add(self.focus)
@@ -109,18 +109,18 @@ class GameModelTest(TestCase):
         """Test that a game can be created"""
         self.assertEqual(self.game.name, "Test Game")
         self.assertEqual(self.game.description, "A test game for dribbling practice")
-        self.assertEqual(self.game.player_count, "2-4")
-        self.assertEqual(self.game.duration, "10min")
+        self.assertEqual(self.game.player_count, "2")
+        self.assertEqual(self.game.duration, "15min")
         self.assertEqual(self.game.created_by, self.user)
         self.assertEqual(str(self.game), "Test Game")
     
     def test_game_get_player_count_display(self):
         """Test player count display method"""
-        self.assertEqual(self.game.get_player_count_display(), "2-4")
+        self.assertEqual(self.game.get_player_count_display(), "2 players")
     
     def test_game_get_duration_display(self):
         """Test duration display method"""
-        self.assertEqual(self.game.get_duration_display(), "10 minutes")
+        self.assertEqual(self.game.get_duration_display(), "15 minutes")
     
     def test_game_get_materials_display(self):
         """Test materials display method"""
@@ -147,7 +147,7 @@ class GameModelTest(TestCase):
         Game.objects.create(
             name="Shooting Practice",
             description="Practice shooting from different positions",
-            player_count="1-2",
+            player_count="2",
             duration="15min",
             created_by=self.user
         )
@@ -221,8 +221,8 @@ class SessionGameModelTest(TestCase):
         self.game = Game.objects.create(
             name="Test Game",
             description="A test game",
-            player_count="2-4",
-            duration="10min",
+            player_count="2",
+            duration="15min",
             created_by=self.user
         )
         
@@ -247,7 +247,7 @@ class SessionGameModelTest(TestCase):
         game2 = Game.objects.create(
             name="Second Game",
             description="Another test game",
-            player_count="1-2",
+            player_count="1",
             duration="5min",
             created_by=self.user
         )
@@ -298,8 +298,8 @@ class ModelIntegrationTest(TestCase):
         self.game1 = Game.objects.create(
             name="Dribbling Practice",
             description="Practice dribbling skills",
-            player_count="1-2",
-            duration="10min",
+            player_count="2",
+            duration="15min",
             created_by=self.user
         )
         self.game1.focus.add(self.dribbling)
@@ -309,7 +309,7 @@ class ModelIntegrationTest(TestCase):
         self.game2 = Game.objects.create(
             name="Shooting Practice",
             description="Practice shooting from different positions",
-            player_count="2-4",
+            player_count="3+",
             duration="15min",
             created_by=self.user
         )
