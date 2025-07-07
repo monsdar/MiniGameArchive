@@ -57,7 +57,7 @@ msgstr "Trainingssession erstellen"
 
 #: templates/games/cart.html:8
 msgid "Review your selected games and create a training session"
-msgstr "Überprüfen Sie Ihre ausgewählten Spiele und erstellen Sie eine Trainingssession"
+msgstr "Überprüfe die ausgewählten Spiele und erstelle eine Trainingssession"
 
 #: templates/games/cart.html:20
 msgid "Selected Games"
@@ -93,7 +93,7 @@ msgstr "Session drucken"
 
 #: templates/games/cart.html:85
 msgid "Are you sure you want to clear all games from your training session?"
-msgstr "Sind Sie sicher, dass Sie alle Spiele aus Ihrer Trainingssession entfernen möchten?"
+msgstr "Sicher, dass alle Spiele aus der Trainingssession entfernt werden sollen?"
 
 #: templates/games/cart.html:87
 msgid "Clear Session"
@@ -101,7 +101,7 @@ msgstr "Session leeren"
 
 #: templates/games/cart.html:90
 msgid "Print your current training session without saving it"
-msgstr "Drucken Sie Ihre aktuelle Trainingssession ohne sie zu speichern"
+msgstr "Drucke die aktuelle Trainingssession ohne sie zu speichern"
 
 #: templates/games/cart.html:96
 msgid "Session Summary"
@@ -117,11 +117,11 @@ msgstr "Minuten"
 
 #: templates/games/cart.html:110
 msgid "No games in your training session"
-msgstr "Keine Spiele in Ihrer Trainingssession"
+msgstr "Keine Spiele in der Trainingssession"
 
 #: templates/games/cart.html:111
 msgid "Add some games to create a training session"
-msgstr "Fügen Sie einige Spiele hinzu, um eine Trainingssession zu erstellen"
+msgstr "Füge Spiele hinzu, um eine Trainingssession zu erstellen"
 
 #: templates/games/cart.html:113
 msgid "Browse Games"
@@ -133,7 +133,7 @@ msgstr "Trainingsspiele"
 
 #: templates/games/game_list.html:8
 msgid "Browse and filter games for your training sessions"
-msgstr "Durchsuchen und filtern Sie Spiele für Ihre Trainingssessions"
+msgstr "Durchsuche und filtere Spiele für deine Trainingssessions"
 
 #: templates/games/game_list.html:16
 msgid "Search"
@@ -149,7 +149,7 @@ msgstr "Filter"
 
 #: templates/games/game_list.html:33
 msgid "Focus Areas"
-msgstr "Schwerpunktbereiche"
+msgstr "Schwerpunkte"
 
 #: templates/games/game_list.html:47
 msgid "Player Count"
@@ -193,4 +193,4 @@ msgstr "Keine Spiele gefunden"
 
 #: templates/games/game_list.html:116
 msgid "Try adjusting your search or filters"
-msgstr "Versuchen Sie, Ihre Suche oder Filter anzupassen" 
+msgstr "Versuche die Suche oder Filter anzupassen" 
