@@ -4,11 +4,19 @@ from django.utils import translation
 
 def language_info(request):
     """Add language information to template context"""
-    current_language = translation.get_language()
-    
-    # Ensure we have a valid language
-    if not current_language or current_language not in dict(settings.LANGUAGES):
-        current_language = settings.LANGUAGE_CODE
+    # Check session for language preference
+    session_language = request.session.get('django_language')
+    if session_language and session_language in dict(settings.LANGUAGES):
+        # Activate the session language
+        translation.activate(session_language)
+        current_language = session_language
+    else:
+        # Use the currently active language
+        current_language = translation.get_language()
+        
+        # Ensure we have a valid language
+        if not current_language or current_language not in dict(settings.LANGUAGES):
+            current_language = settings.LANGUAGE_CODE
     
     return {
         'current_language': current_language,

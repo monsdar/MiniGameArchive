@@ -347,10 +347,11 @@ class GameSuggestionViewTest(ViewTestCase):
     
     def test_game_suggestion_view_post(self):
         """Test game suggestion view POST request"""
+        self.client.login(username='testuser', password='testpass123')
         response = self.client.post(reverse('game_suggestion'), {
             'name': 'Suggested Game',
             'description': 'A suggested game',
-            'player_count': '2-4',
+            'player_count': '3-4',  # valid choice
             'duration': '10min',
             'focus': [self.focus.id],
             'materials': [self.material.id],

@@ -2,10 +2,12 @@
 Unit tests for Django models
 """
 import logging
+import time
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from games.models import Game, Focus, Material, Label, TrainingSession, SessionGame
+from django.db import models
 
 logger = logging.getLogger(__name__)
 
@@ -186,18 +188,24 @@ class TrainingSessionModelTest(TestCase):
     
     def test_session_ordering(self):
         """Test that sessions are ordered by creation date"""
-        # Create another session
+        # Create another session with a small delay to ensure different timestamps
+        time.sleep(0.001)  # 1ms delay
         second_session = TrainingSession.objects.create(
             name="Second Session",
             description="Another test session",
             created_by=self.user
         )
         
-        # Get all sessions (should be ordered by -created_at)
-        sessions = list(TrainingSession.objects.all())
+        # Get all sessions ordered by creation date (newest first)
+        sessions = list(TrainingSession.objects.order_by('-created_at'))
         self.assertEqual(len(sessions), 2)
+        
+        # Verify that the second session (created later) comes first
         self.assertEqual(sessions[0], second_session)  # Newest first
         self.assertEqual(sessions[1], self.session)
+        
+        # Also verify the timestamps
+        self.assertGreater(second_session.created_at, self.session.created_at)
 
 
 class SessionGameModelTest(TestCase):

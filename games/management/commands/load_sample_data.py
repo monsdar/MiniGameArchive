@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from games.models import Focus, Material, Label, Game
+from games.models import Focus, Material, Label, Game, TrainingSession, SessionGame
 
 
 class Command(BaseCommand):
@@ -144,4 +144,48 @@ class Command(BaseCommand):
                 self.stdout.write(f'Created game: {game_data["name"]}')
         
         self.stdout.write(self.style.SUCCESS('Sample data loaded successfully!'))
-        self.stdout.write('You can now login with admin/admin123 to access the admin panel.') 
+        self.stdout.write('You can now login with admin/admin123 to access the admin panel.')
+        
+        # Create sample training sessions
+        admin_user = User.objects.get(username='admin')
+        sample_sessions = [
+            {
+                'name': 'Beginner Dribbling Session',
+                'description': 'A focused session on dribbling fundamentals for beginners',
+                'games': ['Fruit Bowl', 'Sharks and Minnows']
+            },
+            {
+                'name': 'Advanced Shooting Session',
+                'description': 'Advanced shooting practice with various drills',
+                'games': ['Around the World']
+            },
+            {
+                'name': 'Team Building Session',
+                'description': 'Focus on teamwork and passing skills',
+                'games': ['Passing Relay', 'Sharks and Minnows']
+            }
+        ]
+        
+        for session_data in sample_sessions:
+            session, created = TrainingSession.objects.get_or_create(
+                name=session_data['name'],
+                defaults={
+                    'description': session_data['description'],
+                    'created_by': admin_user
+                }
+            )
+            
+            if created:
+                # Add games to session
+                for i, game_name in enumerate(session_data['games'], 1):
+                    try:
+                        game = Game.objects.get(name=game_name)
+                        SessionGame.objects.get_or_create(
+                            session=session,
+                            game=game,
+                            defaults={'order': i}
+                        )
+                    except Game.DoesNotExist:
+                        self.stdout.write(f'Warning: Game "{game_name}" not found for session "{session_data["name"]}"')
+                
+                self.stdout.write(f'Created training session: {session_data["name"]}') 

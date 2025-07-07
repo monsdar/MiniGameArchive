@@ -343,6 +343,8 @@ def game_suggestion(request):
             game = form.save(user=request.user)
             messages.success(request, 'Game suggestion submitted successfully! It will be reviewed by an admin.')
             return redirect('game_list')
+        else:
+            print(f"GameSuggestionForm errors: {form.errors}")
     else:
         form = GameSuggestionForm()
     

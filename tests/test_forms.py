@@ -24,6 +24,19 @@ class GameFormTest(TestCase):
         self.focus = Focus.objects.create(name="Dribbling")
         self.material = Material.objects.create(name="Basketball")
         self.label = Label.objects.create(name="Warm-up", color="#FF0000")
+        
+        # Create a test game for update tests
+        self.game = Game.objects.create(
+            name='Test Game',
+            description='A test game for dribbling practice',
+            player_count='1-2',
+            duration='10min',
+            variants='Some variants',
+            created_by=self.user
+        )
+        self.game.focus.add(self.focus)
+        self.game.materials.add(self.material)
+        self.game.labels.add(self.label)
     
     def test_game_form_valid(self):
         """Test that GameForm is valid with correct data"""
@@ -91,7 +104,7 @@ class GameFormTest(TestCase):
         form_data = {
             'name': 'Updated Game',
             'description': 'Updated description',
-            'player_count': '4-8',
+            'player_count': '5-6',  # valid choice
             'duration': '15min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
@@ -100,14 +113,17 @@ class GameFormTest(TestCase):
         }
         
         form = GameForm(data=form_data, instance=self.game)
+        if not form.is_valid():
+            print(f"Form errors: {form.errors}")
         self.assertTrue(form.is_valid())
         
-        updated_game = form.save()
+        updated_game = form.save(commit=False)
+        updated_game.save()
         form.save_m2m()  # Save many-to-many relationships
         
         self.assertEqual(updated_game.name, 'Updated Game')
         self.assertEqual(updated_game.description, 'Updated description')
-        self.assertEqual(updated_game.player_count, '4-8')
+        self.assertEqual(updated_game.player_count, '5-6')
         self.assertEqual(updated_game.duration, '15min')
         self.assertIn(self.focus, updated_game.focus.all())
         self.assertIn(self.material, updated_game.materials.all())
@@ -247,7 +263,7 @@ class GameSuggestionFormTest(TestCase):
         form_data = {
             'name': 'Test Game',
             'description': 'A test game',
-            'player_count': '2-4',
+            'player_count': '3-4',
             'duration': '10min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
@@ -255,6 +271,8 @@ class GameSuggestionFormTest(TestCase):
         }
         
         form = GameSuggestionForm(data=form_data)
+        if not form.is_valid():
+            print(f"Form errors: {form.errors}")
         self.assertTrue(form.is_valid())
     
     def test_game_suggestion_form_clean_methods(self):
@@ -262,7 +280,7 @@ class GameSuggestionFormTest(TestCase):
         form_data = {
             'name': 'Test Game',
             'description': 'A test game',
-            'player_count': '2-4',
+            'player_count': '3-4',
             'duration': '10min',
             'focus': [self.focus.id],
             'materials': [self.material.id],
@@ -271,13 +289,15 @@ class GameSuggestionFormTest(TestCase):
         }
         
         form = GameSuggestionForm(data=form_data)
+        if not form.is_valid():
+            print(f"Form errors: {form.errors}")
         self.assertTrue(form.is_valid())
         cleaned_data = form.cleaned_data
         
         # Test that cleaned data contains expected fields
         self.assertEqual(cleaned_data['name'], 'Test Game')
         self.assertEqual(cleaned_data['description'], 'A test game')
-        self.assertEqual(cleaned_data['player_count'], '2-4')
+        self.assertEqual(cleaned_data['player_count'], '3-4')
         self.assertEqual(cleaned_data['duration'], '10min')
 
 
@@ -368,15 +388,17 @@ class FormIntegrationTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn('name', form.errors)
         
-        # Test GameSuggestionForm with invalid data
+        # Test GameSuggestionForm with missing required fields
         form_data = {
-            'name': 'Suggested Game',
+            'name': '',  # Required field missing
             'description': 'A suggested game',
             'player_count': '1-2',
             'duration': '10min',
-            'email': 'invalid-email',  # Invalid email should cause validation error
+            'focus': [self.focus.id],
+            'materials': [self.material.id],
+            'labels': [self.label.id],
         }
         
         form = GameSuggestionForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertIn('email', form.errors) 
+        self.assertIn('name', form.errors) 
