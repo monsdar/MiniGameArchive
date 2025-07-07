@@ -1,42 +1,88 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import get_language
 
 
 class Focus(models.Model):
     """Focus areas for games (e.g., Dribbling, Teamwork, Layups)"""
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
+    language = models.CharField(
+        max_length=10,
+        choices=[
+            ('en', 'English'),
+            ('de', 'Deutsch'),
+        ],
+        default='en',
+        help_text="Language of the content"
+    )
     
     class Meta:
         ordering = ['name']
+        unique_together = ['name', 'language']
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.language:
+            self.language = get_language()[:2]  # Get current language code
+        super().save(*args, **kwargs)
 
 
 class Material(models.Model):
     """Materials needed for games (e.g., Basketball, Halfcourt, Hoop)"""
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
+    language = models.CharField(
+        max_length=10,
+        choices=[
+            ('en', 'English'),
+            ('de', 'Deutsch'),
+        ],
+        default='en',
+        help_text="Language of the content"
+    )
     
     class Meta:
         ordering = ['name']
+        unique_together = ['name', 'language']
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.language:
+            self.language = get_language()[:2]  # Get current language code
+        super().save(*args, **kwargs)
 
 
 class Label(models.Model):
     """Custom labels for categorizing games"""
     name = models.CharField(max_length=100, unique=True)
     color = models.CharField(max_length=7, default='#007bff')  # Hex color
+    language = models.CharField(
+        max_length=10,
+        choices=[
+            ('en', 'English'),
+            ('de', 'Deutsch'),
+        ],
+        default='en',
+        help_text="Language of the content"
+    )
     
     class Meta:
         ordering = ['name']
+        unique_together = ['name', 'language']
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.language:
+            self.language = get_language()[:2]  # Get current language code
+        super().save(*args, **kwargs)
 
 
 class Game(models.Model):
@@ -76,6 +122,15 @@ class Game(models.Model):
     materials = models.ManyToManyField(Material, related_name='games', blank=True)
     duration = models.CharField(max_length=10, choices=DURATION_CHOICES)
     labels = models.ManyToManyField(Label, related_name='games', blank=True)
+    language = models.CharField(
+        max_length=10,
+        choices=[
+            ('en', 'English'),
+            ('de', 'Deutsch'),
+        ],
+        default='en',
+        help_text="Language of the content"
+    )
     
     # Metadata
     created_at = models.DateTimeField(auto_now_add=True)
@@ -90,9 +145,15 @@ class Game(models.Model):
     
     class Meta:
         ordering = ['name']
+        unique_together = ['name', 'language']
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.language:
+            self.language = get_language()[:2]  # Get current language code
+        super().save(*args, **kwargs)
     
     def get_focus_display(self):
         return ', '.join([focus.name for focus in self.focus.all()])
@@ -109,15 +170,30 @@ class TrainingSession(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     games = models.ManyToManyField(Game, through='SessionGame', related_name='training_sessions')
+    language = models.CharField(
+        max_length=10,
+        choices=[
+            ('en', 'English'),
+            ('de', 'Deutsch'),
+        ],
+        default='en',
+        help_text="Language of the content"
+    )
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         ordering = ['-created_at']
+        unique_together = ['name', 'language']
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.language:
+            self.language = get_language()[:2]  # Get current language code
+        super().save(*args, **kwargs)
     
     def get_total_duration(self):
         """Calculate total duration of the session"""

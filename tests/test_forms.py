@@ -69,7 +69,7 @@ class GameFormTest(TestCase):
     def test_game_form_save(self):
         """Test that GameForm saves correctly"""
         form_data = {
-            'name': 'Test Game',
+            'name': 'Test Game 2',  # Use a unique name
             'description': 'A test game for dribbling practice',
             'player_count': '1-2',
             'duration': '10min',
@@ -87,7 +87,7 @@ class GameFormTest(TestCase):
         game.save()
         form.save_m2m()  # Save many-to-many relationships
         
-        self.assertEqual(game.name, 'Test Game')
+        self.assertEqual(game.name, 'Test Game 2')
         self.assertEqual(game.description, 'A test game for dribbling practice')
         self.assertEqual(game.player_count, '1-2')
         self.assertEqual(game.duration, '10min')
