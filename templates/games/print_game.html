@@ -1,3 +1,4 @@
+{% load games_extras %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +23,7 @@
             width: 8.5cm;
             height: 5.4cm;
             border: 2px solid #333;
-            margin: 0.2cm;
+            margin: 0;
             padding: 0.3cm;
             page-break-inside: avoid;
             display: inline-block;
@@ -30,36 +31,41 @@
             box-sizing: border-box;
         }
         
+        .card-pair {
+            display: inline-block;
+            margin: 0.2cm;
+            page-break-inside: avoid;
+        }
+        
         .game-card-front {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: white;
         }
         
         .game-card-back {
-            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            background: white;
         }
         
         .game-title {
-            font-size: 14pt;
+            font-size: 10pt;
             font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 0.2cm;
-            text-align: center;
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.1cm;
+            color: black;
+            margin-bottom: 0.1cm;
+            text-align: left;
         }
         
         .focus-badges {
-            margin-bottom: 0.2cm;
-            text-align: center;
+            margin-bottom: 0.1cm;
+            text-align: right;
         }
         
         .focus-badge {
             display: inline-block;
-            background: #007bff;
-            color: white;
-            padding: 0.05cm 0.2cm;
-            margin: 0.05cm;
-            border-radius: 0.1cm;
+            background: white;
+            color: black;
+            padding: 0.03cm 0.08cm;
+            margin: 0.02cm;
+            border-radius: 0.03cm;
+            border: 1px solid #333;
             font-size: 8pt;
             font-weight: bold;
         }
@@ -67,45 +73,45 @@
         .game-info {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.2cm;
-            font-size: 9pt;
+            margin-bottom: 0.1cm;
+            font-size: 8pt;
         }
         
         .game-info span {
-            background: #f8f9fa;
-            padding: 0.05cm 0.1cm;
-            border-radius: 0.05cm;
-            border: 1px solid #dee2e6;
+            background: white;
+            padding: 0.03cm 0.08cm;
+            border-radius: 0.03cm;
+            border: 1px solid #333;
         }
         
         .description {
-            font-size: 9pt;
+            font-size: 8pt;
             line-height: 1.2;
-            margin-bottom: 0.2cm;
+            margin-bottom: 0.1cm;
             text-align: justify;
         }
         
         .materials {
             font-size: 8pt;
-            color: #6c757d;
-            border-top: 1px solid #dee2e6;
+            color: black;
+            border-top: 1px solid #333;
             padding-top: 0.1cm;
         }
         
         .materials strong {
-            color: #495057;
+            color: black;
         }
         
         .variants {
             font-size: 8pt;
-            color: #6c757d;
-            border-top: 1px solid #dee2e6;
+            color: black;
+            border-top: 1px solid #333;
             padding-top: 0.1cm;
             margin-top: 0.1cm;
         }
         
         .variants strong {
-            color: #495057;
+            color: black;
         }
         
         .card-number {
@@ -136,57 +142,46 @@
         {{ game.name }} - Game Card
     </div>
     
-    <!-- Front of Card -->
-    <div class="game-card game-card-front">
-        <div class="card-number">#{{ game.id }}</div>
-        <div class="game-title">{{ game.name }}</div>
-        
-        <div class="focus-badges">
-            {% for focus in game.focus.all %}
-            <span class="focus-badge">{{ focus.name }}</span>
-            {% endfor %}
+    <div class="card-pair">
+        <!-- Front of Card -->
+        <div class="game-card game-card-front">
+            <div class="card-number">#{{ game.id }}</div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.1cm;">
+                <div class="game-title">{{ game.name }}</div>
+                <div class="focus-badges">
+                    {% for focus in game.focus.all %}
+                    <span class="focus-badge">{{ focus.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div style="border-top: 1px solid #333; padding-top: 0.1cm; margin-top: 0.1cm;"></div>
+            
+            <div class="description">
+                {{ game.description|markdown }}
+            </div>
         </div>
         
-        <div class="game-info">
-            <span><i class="bi bi-people"></i> {{ game.get_player_count_display }}</span>
-            <span><i class="bi bi-clock"></i> {{ game.get_duration_display }}</span>
+        <!-- Back of Card -->
+        <div class="game-card game-card-back">
+            <div class="card-number">#{{ game.id }}</div>
+            <div class="game-title">{{ game.name }}</div>
+            
+            {% if game.variants %}
+            <div class="variants">
+                <strong>Variants:</strong><br>
+                {{ game.variants|markdown }}
+            </div>
+            {% endif %}
+            
+            <div class="game-info">
+                <span><i class="bi bi-people"></i> {{ game.get_player_count_display }}</span>
+                <span><i class="bi bi-clock"></i> {{ game.get_duration_display }}</span>
+                {% if game.materials.all %}
+                <span><i class="bi bi-tools"></i> {{ game.get_materials_display }}</span>
+                {% endif %}
+            </div>
         </div>
-        
-        <div class="description">
-            {{ game.description|truncatewords:50 }}
-        </div>
-        
-        {% if game.materials.all %}
-        <div class="materials">
-            <strong>Materials:</strong> {{ game.get_materials_display }}
-        </div>
-        {% endif %}
-    </div>
-    
-    <!-- Back of Card -->
-    <div class="game-card game-card-back">
-        <div class="card-number">#{{ game.id }}</div>
-        <div class="game-title">{{ game.name }}</div>
-        
-        <div class="description">
-            {{ game.description|linebreaks }}
-        </div>
-        
-        {% if game.variants %}
-        <div class="variants">
-            <strong>Variants:</strong><br>
-            {{ game.variants|linebreaks }}
-        </div>
-        {% endif %}
-        
-        {% if game.labels.all %}
-        <div class="materials">
-            <strong>Labels:</strong> 
-            {% for label in game.labels.all %}
-            <span style="background-color: {{ label.color }}; color: white; padding: 0.05cm 0.1cm; border-radius: 0.05cm; font-size: 7pt;">{{ label.name }}</span>
-            {% endfor %}
-        </div>
-        {% endif %}
     </div>
     
     <script>
