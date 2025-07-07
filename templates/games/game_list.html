@@ -120,6 +120,26 @@
                         {% endfor %}
                     </div>
 
+                    <!-- Languages -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">{% trans "Languages" %}</label>
+                        {% for language in languages %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                value="{{ language.name }}"
+                                x-model="selectedLanguages"
+                                @change="updateFilters()"
+                                id="language_{{ language.id }}"
+                            >
+                            <label class="form-check-label" for="language_{{ language.id }}">
+                                {{ language.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
                     <!-- Clear Filters -->
                     <button class="btn btn-outline-secondary btn-sm w-100" @click="clearFilters()">
                         <i class="bi bi-x-circle"></i> {% trans "Clear Filters" %}
@@ -268,6 +288,7 @@ function gameList() {
         selectedDuration: '',
         selectedMaterials: [],
         selectedLabels: [],
+        selectedLanguages: [],
         viewMode: 'grid',
         games: [
             {% for game in page_obj %}
@@ -278,6 +299,7 @@ function gameList() {
                 focus: [{% for focus in game.focus.all %}'{{ focus.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
                 materials: [{% for material in game.materials.all %}'{{ material.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
                 labels: [{% for label in game.labels.all %}'{{ label.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                languages: [{% for language in game.languages.all %}'{{ language.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
                 player_count: '{{ game.player_count }}',
                 player_count_display: '{{ game.get_player_count_display }}',
                 duration: '{{ game.duration }}',
@@ -323,6 +345,12 @@ function gameList() {
                     return false;
                 }
                 
+                // Languages filter
+                if (this.selectedLanguages.length > 0 && 
+                    !this.selectedLanguages.some(language => game.languages.includes(language))) {
+                    return false;
+                }
+                
                 return true;
             });
         },
@@ -336,6 +364,7 @@ function gameList() {
             if (this.selectedDuration) params.append('duration', this.selectedDuration);
             this.selectedMaterials.forEach(material => params.append('materials', material));
             this.selectedLabels.forEach(label => params.append('labels', label));
+            this.selectedLanguages.forEach(language => params.append('languages', language));
             
             const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
             window.history.pushState({}, '', newUrl);
@@ -348,6 +377,7 @@ function gameList() {
             this.selectedDuration = '';
             this.selectedMaterials = [];
             this.selectedLabels = [];
+            this.selectedLanguages = [];
             this.updateFilters();
         },
         

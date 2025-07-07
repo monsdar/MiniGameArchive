@@ -7,7 +7,7 @@ class GameForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = [
-            'name', 'focus', 'description', 'player_count', 
+            'name', 'languages', 'focus', 'description', 'player_count', 
             'variants', 'materials', 'duration', 'labels'
         ]
         widgets = {
@@ -20,7 +20,7 @@ class GameSuggestionForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = [
-            'name', 'focus', 'description', 'player_count', 
+            'name', 'languages', 'focus', 'description', 'player_count', 
             'variants', 'materials', 'duration', 'labels'
         ]
         widgets = {
@@ -44,7 +44,7 @@ class GameSuggestionForm(forms.ModelForm):
 class TrainingSessionForm(forms.ModelForm):
     class Meta:
         model = TrainingSession
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'languages']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
         }

@@ -31,16 +31,22 @@
                             
                             <!-- Player Count & Duration -->
                             <div class="row mb-3">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="d-flex align-items-center">
                                         <i class="bi bi-people text-primary me-2"></i>
                                         <span>{{ game.get_player_count_display }}</span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="d-flex align-items-center">
                                         <i class="bi bi-clock text-primary me-2"></i>
                                         <span>{{ game.get_duration_display }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-globe text-primary me-2"></i>
+                                        <span>{{ game.get_languages_display }}</span>
                                     </div>
                                 </div>
                             </div>

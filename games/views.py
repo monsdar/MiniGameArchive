@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 import logging
 
-from .models import Game, Focus, Material, Label, TrainingSession, SessionGame
+from .models import Game, Focus, Material, Label, TrainingSession, SessionGame, Language
 from .forms import GameSuggestionForm, TrainingSessionForm
 
 # Get logger for this module
@@ -59,6 +59,11 @@ def game_list(request):
     if labels_filter:
         games = games.filter(labels__name__in=labels_filter)
     
+    # Filter by languages
+    languages_filter = request.GET.getlist('languages')
+    if languages_filter:
+        games = games.filter(languages__name__in=languages_filter)
+    
     # Remove duplicates from many-to-many relationships
     games = games.distinct()
     
@@ -71,6 +76,7 @@ def game_list(request):
     focuses = Focus.objects.all()
     materials = Material.objects.all()
     labels = Label.objects.all()
+    languages = Language.objects.all()
     player_counts = Game.PLAYER_COUNT_CHOICES
     durations = Game.DURATION_CHOICES
     
@@ -83,6 +89,7 @@ def game_list(request):
         'focuses': focuses,
         'materials': materials,
         'labels': labels,
+        'languages': languages,
         'player_counts': player_counts,
         'durations': durations,
         'search_query': search_query,
