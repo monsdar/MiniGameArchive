@@ -120,7 +120,7 @@
                 </div>
                 {% empty %}
                 <div class="text-center py-4">
-                    <i class="bi bi-controller display-4 text-muted"></i>
+                    <i class="bi bi-trophy display-4 text-muted"></i>
                     <h5 class="text-muted">No games in this session</h5>
                     <p class="text-muted">Add some games to get started</p>
                     <a href="{% url 'game_list' %}" class="btn btn-primary">
@@ -142,7 +142,7 @@
                 <ul class="list-unstyled mb-0">
                     <li class="mb-3">
                         <div class="d-flex justify-content-between">
-                            <span><i class="bi bi-controller text-primary me-2"></i>Total Games:</span>
+                            <span><i class="bi bi-trophy text-primary me-2"></i>Total Games:</span>
                             <strong>{{ session.sessiongame_set.count }}</strong>
                         </div>
                     </li>
