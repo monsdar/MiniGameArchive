@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load games_extras %}
 
 {% block title %}{% trans "Games" %} - {% trans "MiniGameArchive" %}{% endblock %}
 
@@ -204,7 +205,7 @@
                                 </div>
                                 
                                 <!-- Description -->
-                                <p class="card-text small" x-text="game.description.substring(0, 100) + '...'"></p>
+                                <p class="card-text small" x-html="game.description.substring(0, 100) + '...'"></p>
                                 
                                 <!-- Materials -->
                                 <div class="mb-2" x-show="game.materials.length > 0">
@@ -247,7 +248,7 @@
                                         <span class="badge bg-primary focus-badge me-1" x-text="focus"></span>
                                     </template>
                                 </div>
-                                <p class="mb-1 small" x-text="game.description.substring(0, 150) + '...'"></p>
+                                <p class="mb-1 small" x-html="game.description.substring(0, 150) + '...'"></p>
                                 <small class="text-muted">
                                     <i class="bi bi-people"></i> <span x-text="game.player_count_display"></span> |
                                     <i class="bi bi-clock"></i> <span x-text="game.duration_display"></span>
@@ -295,7 +296,7 @@ function gameList() {
             {
                 id: {{ game.id }},
                 name: '{{ game.name|escapejs }}',
-                description: '{{ game.description|escapejs }}',
+                description: '{{ game.description|markdown|escapejs }}',
                 focus: [{% for focus in game.focus.all %}'{{ focus.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
                 materials: [{% for material in game.materials.all %}'{{ material.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
                 labels: [{% for label in game.labels.all %}'{{ label.name|escapejs }}'{% if not forloop.last %}, {% endif %}{% endfor %}],

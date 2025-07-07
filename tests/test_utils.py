@@ -10,6 +10,8 @@ from django.conf import settings
 from django.utils import translation
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from django.template import Template, Context
+from games.templatetags.games_extras import markdown_filter
 
 logger = logging.getLogger(__name__)
 
@@ -368,4 +370,114 @@ class ConfigurationTest(TestCase):
         self.assertIn('disable_existing_loggers', logging_config)
         self.assertIn('formatters', logging_config)
         self.assertIn('handlers', logging_config)
-        self.assertIn('loggers', logging_config) 
+        self.assertIn('loggers', logging_config)
+
+
+class MarkdownFilterTest(TestCase):
+    """Test cases for the markdown template filter"""
+    
+    def test_markdown_bold(self):
+        """Test bold markdown formatting"""
+        text = "This is **bold** text"
+        result = markdown_filter(text)
+        self.assertIn("<strong>bold</strong>", result)
+        self.assertIn("This is", result)
+    
+    def test_markdown_italic(self):
+        """Test italic markdown formatting"""
+        text = "This is *italic* text"
+        result = markdown_filter(text)
+        self.assertIn("<em>italic</em>", result)
+    
+    def test_markdown_underline(self):
+        """Test underline HTML formatting"""
+        text = "This is <u>underlined</u> text"
+        result = markdown_filter(text)
+        self.assertIn("<u>underlined</u>", result)
+    
+    def test_markdown_lists(self):
+        """Test markdown list formatting"""
+        text = "- Item 1\n- Item 2\n- Item 3"
+        result = markdown_filter(text)
+        self.assertIn("<ul>", result)
+        self.assertIn("<li>Item 1</li>", result)
+        self.assertIn("<li>Item 2</li>", result)
+        self.assertIn("<li>Item 3</li>", result)
+    
+    def test_markdown_numbered_lists(self):
+        """Test markdown numbered list formatting"""
+        text = "1. First item\n2. Second item\n3. Third item"
+        result = markdown_filter(text)
+        self.assertIn("<ol>", result)
+        self.assertIn("<li>First item</li>", result)
+        self.assertIn("<li>Second item</li>", result)
+        self.assertIn("<li>Third item</li>", result)
+    
+    def test_markdown_headers(self):
+        """Test markdown header formatting"""
+        text = "# Header 1\n## Header 2"
+        result = markdown_filter(text)
+        self.assertIn("<h1>Header 1</h1>", result)
+        self.assertIn("<h2>Header 2</h2>", result)
+    
+    def test_markdown_security(self):
+        """Test that potentially dangerous HTML is stripped"""
+        text = "<script>alert('xss')</script>**Safe** text"
+        result = markdown_filter(text)
+        self.assertNotIn("<script>", result)
+        self.assertIn("<strong>Safe</strong>", result)
+        self.assertIn("text", result)
+    
+    def test_markdown_empty_input(self):
+        """Test markdown filter with empty input"""
+        result = markdown_filter("")
+        self.assertEqual(result, "")
+        
+        result = markdown_filter(None)
+        self.assertEqual(result, "")
+    
+    def test_markdown_template_usage(self):
+        """Test markdown filter in template context"""
+        template = Template("{% load games_extras %}{{ text|markdown }}")
+        context = Context({"text": "**Bold** and *italic* text"})
+        result = template.render(context)
+        self.assertIn("<strong>Bold</strong>", result)
+        self.assertIn("<em>italic</em>", result)
+    
+    def test_markdown_complex_content(self):
+        """Test markdown filter with complex content"""
+        text = (
+            "# Game Instructions\n\n"
+            "This is a **fun** game with the following steps:\n\n"
+            "1. Set up the equipment\n"
+            "2. Explain the rules\n"
+            "3. Start the game\n\n"
+            "**Important notes:**\n\n"
+            "- Keep it safe\n"
+            "- Have fun\n"
+            "- Follow the rules\n\n"
+            "<u>Underlined important information</u>"
+        )
+        result = markdown_filter(text)
+        
+        # Check headers
+        self.assertIn("<h1>Game Instructions</h1>", result)
+        
+        # Check bold text
+        self.assertIn("<strong>fun</strong>", result)
+        self.assertIn("<strong>Important notes:</strong>", result)
+        
+        # Check numbered list
+        self.assertIn("<ol>", result)
+        self.assertIn("<li>Set up the equipment</li>", result)
+        self.assertIn("<li>Explain the rules</li>", result)
+        self.assertIn("<li>Start the game</li>", result)
+        
+        # Check bullet list
+        self.assertIn("<ul>", result)
+        self.assertIn("<li>Keep it safe</li>", result)
+        self.assertIn("<li>Have fun</li>", result)
+        self.assertIn("<li>Follow the rules</li>", result)
+        
+        # Check underline
+        self.assertIn("<u>Underlined important information</u>", result) 

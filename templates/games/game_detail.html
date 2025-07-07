@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load games_extras %}
 
 {% block title %}{{ game.name }} - MiniGameArchive{% endblock %}
 
@@ -74,7 +75,7 @@
                 </div>
                 <div class="card-body">
                     <div class="description-content">
-                        {{ game.description|linebreaks }}
+                        {{ game.description|markdown }}
                     </div>
                 </div>
             </div>
@@ -87,7 +88,7 @@
                 </div>
                 <div class="card-body">
                     <div class="variants-content">
-                        {{ game.variants|linebreaks }}
+                        {{ game.variants|markdown }}
                     </div>
                 </div>
             </div>
