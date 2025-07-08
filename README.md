@@ -2,12 +2,18 @@
 
 This project is the MiniGameArchive. A Django website to manage games and exercises you can do with your sports team during training sessions. I'm a Basketball trainer myself, but the project can be used to manage games of all sorts.
 
-It features:
-* A backend to manage exercises
-* A front page that let's you filter and search through the exercises
-* A detail page that shows the exercise with everything you need to know
-* The ability to add exercises to a training plan, so you can easily create plans for the next training session
-* The ability to print single exercises or training plans so you have everything available in your next training session
+### Frontend Features
+- **Responsive Design:** Works on desktop, tablet, and mobile devices
+- **Real-time Filtering:** Alpine.js-powered filtering and search
+- **Training Plans:** Add games to training sessions
+- **Print Functionality:** Business card format printing for games and sessions
+- **Modern UI:** Clean, intuitive interface
+
+### Backend Features
+- **Game Management:** Full CRUD operations for games
+- **User Suggestions:** Public can suggest new games for admin review
+- **Training Sessions:** Create and manage training plans
+- **Admin Interface:** Comprehensive Django admin panel
 
 ## What is a Game?
 
@@ -38,28 +44,19 @@ The typical user-flow let's the coach search and filter for games. When he finds
 
 The printouts are designed to be printed in business card format (front and back page), so it's easy to have them on hand and give some help when checking for the details while working with the team.
 
-## Technology Stack
+### For Coaches
 
-* **Backend:** Django 5.0
-* **Frontend:** Bootstrap 5 + Alpine.js
-* **Database:** SQLite (default) or PostgreSQL
-* **Deployment:** Docker
+1. **Browse Games:** Visit the main page to see all available games
+2. **Filter & Search:** Use the sidebar filters to find specific types of games
+3. **Add to Session:** Click "Add" on games you want to include
+4. **Print:** Print individual game cards or the entire session
 
-## Features
+### For Administrators
 
-### Frontend Features
-- **Responsive Design:** Works on desktop, tablet, and mobile devices
-- **Real-time Filtering:** Alpine.js-powered filtering and search
-- **Shopping Cart:** Add games to training sessions like an e-commerce site
-- **Print Functionality:** Business card format printing for games and sessions
-- **Modern UI:** Clean, intuitive interface with Bootstrap 5
-
-### Backend Features
-- **Game Management:** Full CRUD operations for games
-- **User Suggestions:** Public can suggest new games for admin review
-- **Training Sessions:** Create and manage training plans
-- **Admin Interface:** Comprehensive Django admin panel
-- **Session-based Cart:** Persistent cart functionality
+1. **Access Admin:** Login to the Django admin panel
+2. **Manage Games:** Add, edit, or remove games
+3. **Review Suggestions:** Approve or reject user-submitted games
+4. **Manage Categories:** Add focus areas, materials, and labels
 
 ## Installation
 
@@ -144,62 +141,14 @@ The following configuration options are available as well via env vars:
 * `DJANGO_SECRET_KEY`: Set your own Django secret key. Should be at least 32 char in length
 * `DJANGO_CSRF_TRUSTED_ORIGINS`: Define which addresses the page trusts for loading scripts etc
 
-## Usage
-
-### For Coaches
-
-1. **Browse Games:** Visit the main page to see all available games
-2. **Filter & Search:** Use the sidebar filters to find specific types of games
-3. **Add to Cart:** Click "Add to Cart" on games you want to include
-4. **Create Session:** Go to your cart and create a training session
-5. **Print:** Print individual game cards or the entire session
-
-### For Administrators
-
-1. **Access Admin:** Login to the Django admin panel
-2. **Manage Games:** Add, edit, or remove games
-3. **Review Suggestions:** Approve or reject user-submitted games
-4. **Manage Categories:** Add focus areas, materials, and labels
-
 ## Development
 
-### Project Structure
+## Technology Stack
 
-```
-MiniGameArchive/
-├── minigamearchive/          # Django project settings
-├── games/                    # Main app
-│   ├── models.py            # Database models
-│   ├── views.py             # View logic
-│   ├── forms.py             # Forms
-│   ├── admin.py             # Admin interface
-│   └── management/          # Custom commands
-├── templates/               # HTML templates
-│   ├── base.html           # Base template
-│   └── games/              # Game-specific templates
-├── static/                  # Static files (CSS, JS)
-├── tests/                   # Test suite
-│   ├── test_models.py      # Model tests
-│   ├── test_views.py       # View tests
-│   ├── test_forms.py       # Form tests
-│   ├── test_management_commands.py # Management command tests
-│   ├── test_utils.py       # Utility tests
-│   └── test_settings.py    # Test-specific settings
-├── data/                    # Database and media files
-├── requirements.txt         # Python dependencies
-├── Dockerfile              # Docker configuration
-├── setup.py                # Setup script
-└── run_tests.py            # Test runner script
-```
-
-### Adding New Features
-
-1. **Models:** Add new fields to `games/models.py`
-2. **Views:** Create new views in `games/views.py`
-3. **Templates:** Add templates in `templates/games/`
-4. **URLs:** Update `games/urls.py` with new routes
-5. **Admin:** Register new models in `games/admin.py`
-6. **Tests:** Add corresponding tests in the `tests/` directory
+* **Backend:** Django 5.0
+* **Frontend:** Bootstrap 5 + Alpine.js
+* **Database:** SQLite (default) or PostgreSQL
+* **Deployment:** Docker
 
 ### Testing
 
@@ -219,14 +168,6 @@ python run_tests.py --test-pattern tests.test_models
 # Run all checks (tests, linting, security)
 python run_tests.py --all
 ```
-
-#### Test Coverage
-The test suite covers:
-- **Models**: Database operations, relationships, validation
-- **Views**: HTTP responses, authentication, business logic
-- **Forms**: Validation, data processing, error handling
-- **Management Commands**: Command execution, error handling
-- **Utilities**: Helper functions, configuration
 
 For detailed testing information, see [tests/README.md](tests/README.md).
 
