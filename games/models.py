@@ -224,4 +224,22 @@ class GameSuggestion(models.Model):
         ordering = ['-submitted_at']
     
     def __str__(self):
-        return f"Suggestion: {self.game.name} by {self.submitted_by.username}" 
+        return f"Suggestion: {self.game.name} by {self.submitted_by.username}"
+
+
+class ImpressumContent(models.Model):
+    """Custom content for the Impressum modal that admins can edit"""
+    title = models.CharField(max_length=200, help_text="Title for the custom section")
+    content = models.TextField(help_text="Content in markdown format")
+    is_active = models.BooleanField(default=True, help_text="Whether this content should be displayed")
+    order = models.PositiveIntegerField(default=0, help_text="Order of display in the Impressum modal")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order', 'created_at']
+        verbose_name = "Impressum Content"
+        verbose_name_plural = "Impressum Content"
+    
+    def __str__(self):
+        return self.title 

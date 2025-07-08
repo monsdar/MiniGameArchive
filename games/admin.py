@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Game, Focus, Material, Label, TrainingSession, SessionGame, GameSuggestion, Language, AboutContent
+from .models import Game, Focus, Material, Label, TrainingSession, SessionGame, GameSuggestion, Language, AboutContent, ImpressumContent
 
 
 @admin.register(Language)
@@ -115,6 +115,18 @@ class GameSuggestionAdmin(admin.ModelAdmin):
 
 @admin.register(AboutContent)
 class AboutContentAdmin(admin.ModelAdmin):
+    list_display = ['title', 'is_active', 'order', 'created_at', 'updated_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title', 'content']
+    readonly_fields = ['created_at', 'updated_at']
+    fields = ['title', 'content', 'is_active', 'order', 'created_at', 'updated_at']
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by('order', 'created_at')
+
+
+@admin.register(ImpressumContent)
+class ImpressumContentAdmin(admin.ModelAdmin):
     list_display = ['title', 'is_active', 'order', 'created_at', 'updated_at']
     list_filter = ['is_active', 'created_at']
     search_fields = ['title', 'content']

@@ -73,6 +73,35 @@
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
         }
+        .impressum-content {
+            margin-bottom: 1rem;
+        }
+        .impressum-content p {
+            margin-bottom: 0.5rem;
+        }
+        .impressum-content ul, .impressum-content ol {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+        }
+        .impressum-content blockquote {
+            border-left: 3px solid #6c757d;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: #6c757d;
+        }
+        .impressum-content code {
+            background-color: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+        .impressum-modal h6 {
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
     </style>
     
     {% block extra_css %}{% endblock %}
@@ -254,10 +283,70 @@
         </div>
     </div>
 
+    <!-- Impressum Modal -->
+    <div class="modal fade" id="impressumModal" tabindex="-1" aria-labelledby="impressumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="impressumModalLabel">
+                        <i class="bi bi-file-text"></i> {% trans "Impressum" %}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body impressum-modal">
+                    <div class="row">
+                        <div class="col-md-8">
+                            {% if impressum_content %}
+                                {% for content in impressum_content %}
+                                    <h6 class="text-dark mt-4">{{ content.title }}</h6>
+                                    <div class="impressum-content">
+                                        {{ content.content|markdown }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-dark">{% trans "Legal Information" %}</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><strong>{% trans "Platform" %}:</strong> MiniGameArchive</li>
+                                        <li><strong>{% trans "Purpose" %}:</strong> {% trans "Sports Training Games" %}</li>
+                                        <li><strong>{% trans "License" %}:</strong> <a href="https://github.com/monsdar/MiniGameArchive/blob/main/LICENSE">GNU AGPL v3</a></li>
+                                        <li><strong>{% trans "Source Code" %}:</strong> <a href="https://github.com/monsdar/MiniGameArchive">GitHub</a></li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    
+                                    <h6 class="card-title text-dark">{% trans "Technical Contact" %}</h6>
+                                    <p class="small mb-2">{% trans "For technical issues or questions about the platform functionality, please contact the administrator." %}</p>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <a href="#" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#aboutModal" data-bs-dismiss="modal">
+                                            <i class="bi bi-info-circle"></i> {% trans "About" %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-light py-4 mt-5">
         <div class="container text-center">
             <p class="mb-0">&copy; 2024 {% trans "MiniGameArchive" %}. {% trans "A Django website for managing sports training games." %}</p>
+            <p class="mb-0 mt-2">
+                <a href="#" class="text-muted text-decoration-none" data-bs-toggle="modal" data-bs-target="#impressumModal">
+                    {% trans "Impressum" %}
+                </a>
+            </p>
         </div>
     </footer>
 

@@ -317,4 +317,84 @@ msgstr "Spiel vorschlagen"
 
 #: templates/base.html:156
 msgid "Close"
-msgstr "Schließen" 
+msgstr "Schließen"
+
+#: templates/base.html:158
+msgid "Impressum"
+msgstr "Impressum"
+
+#: templates/base.html:163
+msgid "Publisher Information"
+msgstr "Herausgeber-Informationen"
+
+#: templates/base.html:164
+msgid "This website is operated by a sports enthusiast and coach who maintains this platform for the benefit of the sports community."
+msgstr "Diese Website wird von einem Sportbegeisterten und Trainer betrieben, der diese Plattform zum Wohle der Sportgemeinschaft unterhält."
+
+#: templates/base.html:166
+msgid "Contact Information"
+msgstr "Kontaktinformationen"
+
+#: templates/base.html:167
+msgid "For questions, suggestions, or support regarding this platform, please contact the administrator through the admin panel."
+msgstr "Bei Fragen, Vorschlägen oder Support bezüglich dieser Plattform wenden Sie sich bitte über das Admin-Panel an den Administrator."
+
+#: templates/base.html:169
+msgid "Content Responsibility"
+msgstr "Inhaltliche Verantwortung"
+
+#: templates/base.html:170
+msgid "The content on this website is provided for educational and informational purposes. While we strive for accuracy, we cannot guarantee the completeness or correctness of all information."
+msgstr "Die Inhalte auf dieser Website werden zu Bildungs- und Informationszwecken bereitgestellt. Obwohl wir uns um Genauigkeit bemühen, können wir nicht die Vollständigkeit oder Richtigkeit aller Informationen garantieren."
+
+#: templates/base.html:172
+msgid "External Links"
+msgstr "Externe Links"
+
+#: templates/base.html:173
+msgid "This website may contain links to external websites. We are not responsible for the content of external websites."
+msgstr "Diese Website kann Links zu externen Websites enthalten. Wir sind nicht für den Inhalt externer Websites verantwortlich."
+
+#: templates/base.html:175
+msgid "Copyright"
+msgstr "Urheberrecht"
+
+#: templates/base.html:176
+msgid "The content on this website is protected by copyright. Reproduction or distribution of content is only permitted with prior written consent."
+msgstr "Der Inhalt dieser Website ist urheberrechtlich geschützt. Vervielfältigung oder Verbreitung von Inhalten ist nur mit vorheriger schriftlicher Zustimmung gestattet."
+
+#: templates/base.html:185
+msgid "Legal Information"
+msgstr "Rechtliche Informationen"
+
+#: templates/base.html:187
+msgid "Platform"
+msgstr "Plattform"
+
+#: templates/base.html:188
+msgid "Purpose"
+msgstr "Zweck"
+
+#: templates/base.html:188
+msgid "Sports Training Games"
+msgstr "Sport-Trainingsspiele"
+
+#: templates/base.html:189
+msgid "License"
+msgstr "Lizenz"
+
+#: templates/base.html:190
+msgid "Source Code"
+msgstr "Quellcode"
+
+#: templates/base.html:190
+msgid "Available on request"
+msgstr "Auf Anfrage verfügbar"
+
+#: templates/base.html:193
+msgid "Technical Contact"
+msgstr "Technischer Kontakt"
+
+#: templates/base.html:194
+msgid "For technical issues or questions about the platform functionality, please contact the administrator."
+msgstr "Bei technischen Problemen oder Fragen zur Plattform-Funktionalität wenden Sie sich bitte an den Administrator." 
