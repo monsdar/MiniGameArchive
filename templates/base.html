@@ -44,6 +44,35 @@
         .print-only {
             display: none;
         }
+        .about-content {
+            margin-bottom: 1rem;
+        }
+        .about-content p {
+            margin-bottom: 0.5rem;
+        }
+        .about-content ul, .about-content ol {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+        }
+        .about-content blockquote {
+            border-left: 3px solid #007bff;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: #6c757d;
+        }
+        .about-content code {
+            background-color: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+        .about-modal h6 {
+            font-weight: 600;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
     </style>
     
     {% block extra_css %}{% endblock %}
@@ -75,6 +104,11 @@
                     {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'game_suggestion' %}">{% trans "Suggest Game" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                            <i class="bi"></i> {% trans "About" %}
+                        </button>
                     </li>
                 </ul>
                 
@@ -143,6 +177,82 @@
     <main class="container my-4">
         {% block content %}{% endblock %}
     </main>
+
+    <!-- About Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">
+                        <i class="bi bi-trophy"></i> {% trans "About MiniGameArchive" %}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body about-modal">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="text-dark">{% trans "What is MiniGameArchive?" %}</h6>
+                            <p>{% trans "MiniGameArchive is a comprehensive platform for managing and organizing sports training games. It helps coaches, trainers, and sports enthusiasts discover, plan, and track training sessions with a variety of games and exercises." %}</p>
+                            
+                            <h6 class="text-dark mt-4">{% trans "Key Features" %}</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-search text-success"></i> <strong>{% trans "Game Discovery" %}:</strong> {% trans "Browse and search through a curated collection of training games" %}</li>
+                                <li><i class="bi bi-funnel text-info"></i> <strong>{% trans "Smart Filtering" %}:</strong> {% trans "Filter games by focus area, player count, duration, materials, and more" %}</li>
+                                <li><i class="bi bi-calendar-plus text-warning"></i> <strong>{% trans "Session Planning" %}:</strong> {% trans "Build custom training sessions by combining multiple games" %}</li>
+                                <li><i class="bi bi-printer text-secondary"></i> <strong>{% trans "Print Support" %}:</strong> {% trans "Print individual games or complete training sessions" %}</li>
+                                <li><i class="bi bi-globe text-primary"></i> <strong>{% trans "Multilingual" %}:</strong> {% trans "Available in multiple languages for global accessibility" %}</li>
+                                <li><i class="bi bi-lightbulb text-warning"></i> <strong>{% trans "Game Suggestions" %}:</strong> {% trans "Contribute new games to expand the collection" %}</li>
+                            </ul>
+                            
+                            {% if about_content %}
+                                {% for content in about_content %}
+                                    <h6 class="text-dark mt-4">{{ content.title }}</h6>
+                                    <div class="about-content">
+                                        {{ content.content|markdown }}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <h6 class="text-dark mt-4">{% trans "How to Use" %}</h6>
+                                <ol>
+                                    <li>{% trans "Browse games using the search and filter options" %}</li>
+                                    <li>{% trans "Add games to your training session using the 'Add to Session' button" %}</li>
+                                    <li>{% trans "Review your session in the 'Training Session' tab" %}</li>
+                                    <li>{% trans "Print your session or save it for future reference" %}</li>
+                                </ol>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title text-dark">{% trans "Technical Details" %}</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><strong>{% trans "Framework" %}:</strong> Django</li>
+                                        <li><strong>{% trans "Frontend" %}:</strong> Bootstrap 5</li>
+                                        <li><strong>{% trans "Icons" %}:</strong> Bootstrap Icons</li>
+                                        <li><strong>{% trans "JavaScript" %}:</strong> Alpine.js</li>
+                                    </ul>
+                                    
+                                    <hr>
+                                    
+                                    <h6 class="card-title text-dark">{% trans "Contact & Support" %}</h6>
+                                    <p class="small mb-2">{% trans "For questions, suggestions, or support, please contact the administrator." %}</p>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#aboutModal" data-bs-dismiss="modal">
+                                            <i class="bi bi-lightbulb"></i> {% trans "Suggest a Game" %}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-light py-4 mt-5">

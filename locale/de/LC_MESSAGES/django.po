@@ -193,4 +193,128 @@ msgstr "Keine Spiele gefunden"
 
 #: templates/games/game_list.html:116
 msgid "Try adjusting your search or filters"
-msgstr "Versuche die Suche oder Filter anzupassen" 
+msgstr "Versuche die Suche oder Filter anzupassen"
+
+#: templates/base.html:51
+msgid "About"
+msgstr "Über"
+
+#: templates/base.html:108
+msgid "About MiniGameArchive"
+msgstr "Über MiniGameArchive"
+
+#: templates/base.html:113
+msgid "What is MiniGameArchive?"
+msgstr "Was ist MiniGameArchive?"
+
+#: templates/base.html:114
+msgid "MiniGameArchive is a comprehensive platform for managing and organizing sports training games. It helps coaches, trainers, and sports enthusiasts discover, plan, and track training sessions with a variety of games and exercises."
+msgstr "MiniGameArchive ist eine umfassende Plattform zur Verwaltung und Organisation von Trainingsspielen. Es hilft Trainern, Übungsleitern und Sportbegeisterten dabei, Trainingssessions mit verschiedenen Spielen und Übungen zu entdecken, zu planen und zu verfolgen."
+
+#: templates/base.html:117
+msgid "Key Features"
+msgstr "Hauptfunktionen"
+
+#: templates/base.html:119
+msgid "Game Discovery"
+msgstr "Spiel-Entdeckung"
+
+#: templates/base.html:119
+msgid "Browse and search through a curated collection of training games"
+msgstr "Durchsuchen und suchen Sie in einer kuratierten Sammlung von Trainingsspielen"
+
+#: templates/base.html:120
+msgid "Smart Filtering"
+msgstr "Intelligente Filterung"
+
+#: templates/base.html:120
+msgid "Filter games by focus area, player count, duration, materials, and more"
+msgstr "Filtern Sie Spiele nach Schwerpunkt, Spieleranzahl, Dauer, Materialien und mehr"
+
+#: templates/base.html:121
+msgid "Session Planning"
+msgstr "Session-Planung"
+
+#: templates/base.html:121
+msgid "Build custom training sessions by combining multiple games"
+msgstr "Erstellen Sie maßgeschneiderte Trainingssessions durch die Kombination mehrerer Spiele"
+
+#: templates/base.html:122
+msgid "Print Support"
+msgstr "Druck-Unterstützung"
+
+#: templates/base.html:122
+msgid "Print individual games or complete training sessions"
+msgstr "Drucken Sie einzelne Spiele oder komplette Trainingssessions"
+
+#: templates/base.html:123
+msgid "Multilingual"
+msgstr "Mehrsprachig"
+
+#: templates/base.html:123
+msgid "Available in multiple languages for global accessibility"
+msgstr "Verfügbar in mehreren Sprachen für globale Zugänglichkeit"
+
+#: templates/base.html:124
+msgid "Game Suggestions"
+msgstr "Spiel-Vorschläge"
+
+#: templates/base.html:124
+msgid "Contribute new games to expand the collection"
+msgstr "Tragen Sie neue Spiele bei, um die Sammlung zu erweitern"
+
+#: templates/base.html:127
+msgid "How to Use"
+msgstr "Verwendung"
+
+#: templates/base.html:129
+msgid "Browse games using the search and filter options"
+msgstr "Durchsuchen Sie Spiele mit den Such- und Filteroptionen"
+
+#: templates/base.html:130
+msgid "Add games to your training session using the 'Add to Session' button"
+msgstr "Fügen Sie Spiele zu Ihrer Trainingssession mit der 'Zur Session hinzufügen'-Schaltfläche hinzu"
+
+#: templates/base.html:131
+msgid "Review your session in the 'Training Session' tab"
+msgstr "Überprüfen Sie Ihre Session im 'Trainingssession'-Tab"
+
+#: templates/base.html:132
+msgid "Print your session or save it for future reference"
+msgstr "Drucken Sie Ihre Session oder speichern Sie sie für zukünftige Referenz"
+
+#: templates/base.html:137
+msgid "Technical Details"
+msgstr "Technische Details"
+
+#: templates/base.html:140
+msgid "Framework"
+msgstr "Framework"
+
+#: templates/base.html:141
+msgid "Frontend"
+msgstr "Frontend"
+
+#: templates/base.html:142
+msgid "Icons"
+msgstr "Icons"
+
+#: templates/base.html:143
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: templates/base.html:147
+msgid "Contact & Support"
+msgstr "Kontakt & Support"
+
+#: templates/base.html:148
+msgid "For questions, suggestions, or support, please contact the administrator."
+msgstr "Bei Fragen, Vorschlägen oder Support wenden Sie sich bitte an den Administrator."
+
+#: templates/base.html:151
+msgid "Suggest a Game"
+msgstr "Spiel vorschlagen"
+
+#: templates/base.html:156
+msgid "Close"
+msgstr "Schließen" 

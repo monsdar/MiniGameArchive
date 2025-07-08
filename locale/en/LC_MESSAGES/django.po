@@ -193,4 +193,128 @@ msgstr "No games found"
 
 #: templates/games/game_list.html:116
 msgid "Try adjusting your search or filters"
-msgstr "Try adjusting your search or filters" 
+msgstr "Try adjusting your search or filters"
+
+#: templates/base.html:51
+msgid "About"
+msgstr "About"
+
+#: templates/base.html:108
+msgid "About MiniGameArchive"
+msgstr "About MiniGameArchive"
+
+#: templates/base.html:113
+msgid "What is MiniGameArchive?"
+msgstr "What is MiniGameArchive?"
+
+#: templates/base.html:114
+msgid "MiniGameArchive is a comprehensive platform for managing and organizing sports training games. It helps coaches, trainers, and sports enthusiasts discover, plan, and track training sessions with a variety of games and exercises."
+msgstr "MiniGameArchive is a comprehensive platform for managing and organizing sports training games. It helps coaches, trainers, and sports enthusiasts discover, plan, and track training sessions with a variety of games and exercises."
+
+#: templates/base.html:117
+msgid "Key Features"
+msgstr "Key Features"
+
+#: templates/base.html:119
+msgid "Game Discovery"
+msgstr "Game Discovery"
+
+#: templates/base.html:119
+msgid "Browse and search through a curated collection of training games"
+msgstr "Browse and search through a curated collection of training games"
+
+#: templates/base.html:120
+msgid "Smart Filtering"
+msgstr "Smart Filtering"
+
+#: templates/base.html:120
+msgid "Filter games by focus area, player count, duration, materials, and more"
+msgstr "Filter games by focus area, player count, duration, materials, and more"
+
+#: templates/base.html:121
+msgid "Session Planning"
+msgstr "Session Planning"
+
+#: templates/base.html:121
+msgid "Build custom training sessions by combining multiple games"
+msgstr "Build custom training sessions by combining multiple games"
+
+#: templates/base.html:122
+msgid "Print Support"
+msgstr "Print Support"
+
+#: templates/base.html:122
+msgid "Print individual games or complete training sessions"
+msgstr "Print individual games or complete training sessions"
+
+#: templates/base.html:123
+msgid "Multilingual"
+msgstr "Multilingual"
+
+#: templates/base.html:123
+msgid "Available in multiple languages for global accessibility"
+msgstr "Available in multiple languages for global accessibility"
+
+#: templates/base.html:124
+msgid "Game Suggestions"
+msgstr "Game Suggestions"
+
+#: templates/base.html:124
+msgid "Contribute new games to expand the collection"
+msgstr "Contribute new games to expand the collection"
+
+#: templates/base.html:127
+msgid "How to Use"
+msgstr "How to Use"
+
+#: templates/base.html:129
+msgid "Browse games using the search and filter options"
+msgstr "Browse games using the search and filter options"
+
+#: templates/base.html:130
+msgid "Add games to your training session using the 'Add to Session' button"
+msgstr "Add games to your training session using the 'Add to Session' button"
+
+#: templates/base.html:131
+msgid "Review your session in the 'Training Session' tab"
+msgstr "Review your session in the 'Training Session' tab"
+
+#: templates/base.html:132
+msgid "Print your session or save it for future reference"
+msgstr "Print your session or save it for future reference"
+
+#: templates/base.html:137
+msgid "Technical Details"
+msgstr "Technical Details"
+
+#: templates/base.html:140
+msgid "Framework"
+msgstr "Framework"
+
+#: templates/base.html:141
+msgid "Frontend"
+msgstr "Frontend"
+
+#: templates/base.html:142
+msgid "Icons"
+msgstr "Icons"
+
+#: templates/base.html:143
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: templates/base.html:147
+msgid "Contact & Support"
+msgstr "Contact & Support"
+
+#: templates/base.html:148
+msgid "For questions, suggestions, or support, please contact the administrator."
+msgstr "For questions, suggestions, or support, please contact the administrator."
+
+#: templates/base.html:151
+msgid "Suggest a Game"
+msgstr "Suggest a Game"
+
+#: templates/base.html:156
+msgid "Close"
+msgstr "Close" 

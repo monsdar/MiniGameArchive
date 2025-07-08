@@ -186,6 +186,24 @@ class SessionGame(models.Model):
         return f"{self.session.name} - {self.game.name} (Order: {self.order})"
 
 
+class AboutContent(models.Model):
+    """Custom content for the About modal that admins can edit"""
+    title = models.CharField(max_length=200, help_text="Title for the custom section")
+    content = models.TextField(help_text="Content in markdown format")
+    is_active = models.BooleanField(default=True, help_text="Whether this content should be displayed")
+    order = models.PositiveIntegerField(default=0, help_text="Order of display in the About modal")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order', 'created_at']
+        verbose_name = "About Content"
+        verbose_name_plural = "About Content"
+    
+    def __str__(self):
+        return f"{self.title} ({'Active' if self.is_active else 'Inactive'})"
+
+
 class GameSuggestion(models.Model):
     """Model for user suggestions of new games"""
     game = models.OneToOneField(Game, on_delete=models.CASCADE)

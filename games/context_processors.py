@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils import translation
+from .models import AboutContent
 
 
 def language_info(request):
@@ -22,4 +23,5 @@ def language_info(request):
         'current_language': current_language,
         'available_languages': settings.LANGUAGES,
         'language_names': dict(settings.LANGUAGES),
+        'about_content': AboutContent.objects.filter(is_active=True).order_by('order', 'created_at'),
     }

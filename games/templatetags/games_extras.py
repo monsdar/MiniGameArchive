@@ -10,7 +10,7 @@ register = template.Library()
 def markdown_filter(text):
     """
     Convert markdown text to HTML with limited allowed tags for security.
-    Supports: bold, italic, underline, lists, and basic formatting. Headers are not allowed.
+    Supports: bold, italic, underline, lists, links, and basic formatting. Headers are not allowed.
     """
     if not text:
         return ""
@@ -35,10 +35,12 @@ def markdown_filter(text):
         'ul', 'ol', 'li',  # Lists
         'blockquote',  # Blockquotes
         'code', 'pre',  # Code blocks
+        'a',  # Links
     ]
     
     allowed_attributes = {
         '*': ['class'],  # Allow class attribute on all elements
+        'a': ['href', 'title', 'target'],  # Allow link attributes
     }
     
     # Clean the HTML to remove potentially dangerous content
